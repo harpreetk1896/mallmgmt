@@ -15,8 +15,8 @@ public class Connect {
         public static Connection ConnectDB(){
              try{
            
-          Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-         Connection con = DriverManager.getConnection("jdbc:derby:mallmall;create=true","rishab","rishab");
+          Class.forName("org.apache.derby.jdbc.ClientDriver");
+         Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/mallmgm","rishab","rishab");
          System.out.println("Is line mein koi dikkt hai");
           return con;
             

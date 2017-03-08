@@ -22,6 +22,7 @@ public class Mainpage extends javax.swing.JFrame {
     public static AddDistributor dist;
     public static AddProduct pro;
     public static AddStockItem stock;
+    public static Billing bill;
     
     public Mainpage() {
         initComponents();
@@ -117,7 +118,7 @@ public class Mainpage extends javax.swing.JFrame {
         });
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel10.setText("Inventory");
+        jLabel10.setText("Invoice");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel11.setText("Employee");

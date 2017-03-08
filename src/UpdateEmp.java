@@ -36,24 +36,28 @@ public class UpdateEmp extends javax.swing.JFrame {
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
+        this.setSize(x,y);
+        jComboBox2.requestFocus();
         //Getting product names into an array list
         Connection con=Connect.ConnectDB();
         ResultSet rs=null;
         PreparedStatement pst=null;
-        ArrayList<String> p_names = new ArrayList<String>();
-        String p_id,p_name;
+        ArrayList<String> e_names = new ArrayList<String>();
+        String e_id,e_name;
+        e_names.add("");
         //String empid=jTextField1.getText();
-        String sql= "select pid,pname from happy.product";
+        String sql= "select empid,name from happy.employee";
         
         try
         {
             pst=con.prepareStatement(sql);
             rs= pst.executeQuery();
+            System.out.println(rs);
 
             while (rs.next() ){
-                p_id=rs.getString(0);
-                p_name=rs.getString(1);
-                p_names.add(p_id+"~"+p_name);
+                e_id=rs.getString(1);
+                e_name=rs.getString(2);
+                e_names.add(e_name+" ~ "+e_id);
             }
    
         }catch(HeadlessException e){
@@ -62,13 +66,11 @@ public class UpdateEmp extends javax.swing.JFrame {
         }   catch (SQLException ex) {
             Logger.getLogger(DelEmp.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String[] p_array = new String[p_names.size()];
-        p_array=p_names.toArray(p_array);
+        String[] p_array = new String[e_names.size()];
+        p_array=e_names.toArray(p_array);
         Arrays.sort(p_array);
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(p_array));
-        AutoComplete.createAndShowGUI(jComboBox2);
-        System.out.println(jComboBox2);
-        this.setSize(x,y);
+        AutoComplete.createAndShowGUI(jComboBox2);        
     }
 
     /**
@@ -380,6 +382,9 @@ public class UpdateEmp extends javax.swing.JFrame {
         Connection con=Connect.ConnectDB();
         ResultSet rs=null;
         PreparedStatement pst=null;
+        String emp_choosen = jComboBox2.getSelectedItem().toString();
+        empid = emp_choosen.substring(emp_choosen.lastIndexOf("~") + 2);
+        //System.out.println(jComboBox2.getSelectedItem());
         //String empid=jTextField1.getText();
         String sql= "select * from happy.employee where empid = " + empid;
         

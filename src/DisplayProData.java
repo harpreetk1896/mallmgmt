@@ -23,8 +23,8 @@ public class DisplayProData extends JFrame  {
     PreparedStatement pst;
     String ids;
     static JTable table;
-    private static String Name=null,Info=null,Pid=null;
-    String[] columnNames = {"P_id","Name","Info"};
+    private static String Name=null,Info=null,Pid=null,Price=null;
+    String[] columnNames = {"P_id","Name","Info","Price"};
     String from;
     DefaultTableModel model; 
     
@@ -69,8 +69,9 @@ public class DisplayProData extends JFrame  {
                 Name = rs.getString("pname");
                 Info= rs.getString("pinfo");
                 Pid = rs.getString("pid");
+                Price = rs.getString("s_price");
                 
-                model.addRow(new Object[]{Pid,Name,Info});
+                model.addRow(new Object[]{Pid,Name,Info,Price});
                 //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
                 i++;
             }
