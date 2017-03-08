@@ -288,7 +288,7 @@ public class UpdatePro extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-     private static String Name=null,Info=null;
+     private static String Name=null,Info=null,Price=null;
      
          
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -332,8 +332,8 @@ public class UpdatePro extends javax.swing.JFrame {
             if (rs.next() ){
                 Name=rs.getString(2);
                 Info=rs.getString(3);
-                
-                UpdateFramePro frm = new UpdateFramePro(pid,Name,Info);
+                Price=rs.getString(5);
+                UpdateFramePro frm = new UpdateFramePro(pid,Name,Info,Price);
                 jTextField1.setText(null);
                 //frm.setVisible(true);
             }
