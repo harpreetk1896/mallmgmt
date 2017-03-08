@@ -1,5 +1,6 @@
 
 import java.awt.HeadlessException;
+import java.awt.List;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,10 +36,36 @@ public class UpdateEmp extends javax.swing.JFrame {
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
-        String[] fruits = new String[] {"","Pineapple","Apple", "Orange", "Banana","Pine","Pikachu","Pixel"
-        ,"zebra","cucumber","apricot"};
-        Arrays.sort(fruits);
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(fruits));
+        //Getting product names into an array list
+        Connection con=Connect.ConnectDB();
+        ResultSet rs=null;
+        PreparedStatement pst=null;
+        ArrayList<String> p_names = new ArrayList<String>();
+        String p_id,p_name;
+        //String empid=jTextField1.getText();
+        String sql= "select pid,pname from happy.product";
+        
+        try
+        {
+            pst=con.prepareStatement(sql);
+            rs= pst.executeQuery();
+
+            while (rs.next() ){
+                p_id=rs.getString(0);
+                p_name=rs.getString(1);
+                p_names.add(p_id+"~"+p_name);
+            }
+   
+        }catch(HeadlessException e){
+            JOptionPane.showMessageDialog(null, e);
+
+        }   catch (SQLException ex) {
+            Logger.getLogger(DelEmp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String[] p_array = new String[p_names.size()];
+        p_array=p_names.toArray(p_array);
+        Arrays.sort(p_array);
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(p_array));
         AutoComplete.createAndShowGUI(jComboBox2);
         System.out.println(jComboBox2);
         this.setSize(x,y);
@@ -240,9 +268,9 @@ public class UpdateEmp extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(89, 89, 89)
                         .addComponent(jLabel1)
-                        .addGap(71, 71, 71)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(82, 82, 82)
+                        .addGap(44, 44, 44)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55)
                         .addComponent(jButton7))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(305, 305, 305)

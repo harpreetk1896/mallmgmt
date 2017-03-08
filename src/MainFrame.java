@@ -29,9 +29,9 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
-    Connection con=null;
-    ResultSet rs=null;
-    PreparedStatement pst=null;
+    private static Connection con=null;
+    private static ResultSet rs=null;
+    private static PreparedStatement pst=null;
    
     public MainFrame() {
        
@@ -203,11 +203,33 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private static void handler2() {    
+      con=Connect.ConnectDB();
+      String sql= "select * from app.ram ";
+      try
+      {
+          pst=con.prepareStatement(sql);
+          rs= pst.executeQuery();
+          
+          if (rs.next() ){
+             System.out.println("i m done");
+          }
+          else{
+              
+            JOptionPane.showMessageDialog(null, "Login Failed..Try again !","Access denied",JOptionPane.ERROR_MESSAGE);
+            
+         }
+      }catch(SQLException | HeadlessException e){
+         JOptionPane.showMessageDialog(null, e); 
+          
+    }            
+     }
+    
     private void handler() {    
            con=Connect.ConnectDB();
          char[] pass=  jPasswordField1.getPassword(); 
          String pass1 = new String(pass);
-      String sql= "select * from happy.users where Username= '" + jTextField1.getText() + "'"
+      String sql= "select * from app.users where Username= '" + jTextField1.getText() + "'"
               + " and Password ='" + pass1 + "'";
       //System.out.println(sql);
       try
@@ -294,7 +316,8 @@ public class MainFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                handler2();
+                //new MainFrame().setVisible(true);
             }
         });
     }
