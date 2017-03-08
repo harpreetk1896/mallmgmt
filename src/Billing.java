@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -34,69 +35,62 @@ public class Billing extends javax.swing.JFrame {
     ResultSet  rs1;
     Statement  st1;
     PreparedStatement pst;
-    static JTable table;
-    private static String item=null,invoice_no=null,cust_name=null;
-    private static int sr_no=1,qty=0,amt=0,start_row=0,end_row=0,pid=0;
+   
+    private static String item=null,cust_name=null;
+    private static int sr_no=0,qty=0,start_row=0,end_row=0,in_id=0;
+    double amt=0,total=0;
     String[] columnNames = {"SR. NO","ITEM DESCRIPTION","QUANTITY","AMOUNT"};
     DefaultTableModel model ;
     
-    public Billing() throws SQLException {
+    public Billing() {
         initComponents();
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
-        conn = Connect.ConnectDB();
-        pst = conn.prepareStatement("select count(*) from happy.bill");
-        ResultSet rs = pst.executeQuery();
-        start_row=rs.getInt(1);
         this.setSize(x,y);
+        model=new DefaultTableModel();
+        model.setColumnIdentifiers(columnNames);
+        //jTable1 = new JTable();
+        jTable1.setModel(model);
+        
+        conn = Connect.ConnectDB();
+        try {
+            getCount();
+        } catch (SQLException ex) {
+            Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    void getCount() throws SQLException
+    {
+        pst = conn.prepareStatement("select count(*) from happy.bill");
+        ResultSet rs = pst.executeQuery();
+        rs.next();
+        start_row=rs.getInt(1);
+    }
+    
+    
      public void showTable() {
-         model.setColumnIdentifiers(columnNames);
-        table = new JTable();
-        table.setModel(model);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        table.setFillsViewportHeight(true);
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.setHorizontalScrollBarPolicy(
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scroll.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-       
-        
+      
+        jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable1.setFillsViewportHeight(true);
 
         try {
-            conn = Connect.ConnectDB();
-            pst = conn.prepareStatement("select pid from happy.product where pname="+item);
-            ResultSet rs = pst.executeQuery();
-            pid=rs.getInt(1);
             
-            pst = conn.prepareStatement("select price from happy.stock where pid="+pid);
-            rs = pst.executeQuery();
-            int i = 0;
-            while (rs.next()) {
-                /*Name = rs.getString("dname");
-                Add = rs.getString("daddress");
-                distid = rs.getString("distid");
-                No = rs.getString("dcontact_no");
-                
-                model.addRow(new Object[]{distid,Name,No,Add});
-                //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
-                i++;*/
-            }
-            if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (i == 1) {
-                //System.out.println(i + " Record Found");
-            } else {
-                //System.out.println(i + " Records Found");
-            }
+            pst = conn.prepareStatement("select s_price from happy.product where pname='"+item+"'");
+            ResultSet rs = pst.executeQuery();
+            sr_no++;
+            rs.next();
+            amt=rs.getInt(1);
+            amt*=qty;
+            
+           model.addRow(new Object[]{sr_no,item,qty,amt});
+           total+=amt;
+           jLabel6.setText("Grand Total: "+total);
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        add(scroll);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -165,7 +159,7 @@ public class Billing extends javax.swing.JFrame {
         jButton5.setBackground(new java.awt.Color(0, 102, 102));
         jButton5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("View Bills");
+        jButton5.setText("View Bill");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -221,12 +215,7 @@ public class Billing extends javax.swing.JFrame {
         });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
+            new Object [][] {},
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
@@ -256,19 +245,16 @@ public class Billing extends javax.swing.JFrame {
                         .addGap(52, 52, 52)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(377, 377, 377))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(45, 45, 45)))
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(425, 425, 425)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(377, 377, 377)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,10 +280,10 @@ public class Billing extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                .addGap(31, 31, 31)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(jLabel3)
                 .addGap(37, 37, 37)
@@ -399,7 +385,6 @@ public class Billing extends javax.swing.JFrame {
         item=jTextField2.getText();
         qty=Integer.parseInt(jTextField5.getText());
         
-        System.out.println();
         showTable();
        
         jTextField2.setText(null);
@@ -408,7 +393,12 @@ public class Billing extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // Back Button
+        try {
+            // Back Button
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Mainpage frm = new Mainpage();
           frm.setVisible(true);
           setVisible(false);
@@ -423,20 +413,56 @@ public class Billing extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // generate Bill
+        end_row=sr_no;
+        cust_name=jTextField1.getText();
+        try{
+            Statement s1 =null;
+            s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            s1.executeUpdate("INSERT INTO HAPPY.invoice (cust_name,startrow,endrow) VALUES ('"+cust_name+"',"+start_row+","+end_row+")");
+            pst = conn.prepareStatement("select invoiceid from happy.invoice where startrow="+start_row);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            in_id=rs.getInt(1);
+            System.out.println(""+in_id);
+            
+            s1.close();
+         }
+        catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
+          };
+        
+        
+        
+        Vector v= model.getDataVector();
+        System.out.println(""+sr_no);
+        for(int i=0;i<sr_no;i++)
+        {
+            Vector c=(Vector)v.elementAt(i);
+            item=(String)c.elementAt(1);
+            qty=(Integer)c.elementAt(2);
+            amt=(Double)c.elementAt(3);
+            
+            //System.out.println(""+item+" "+qty+":"+amt);
+            try {
+               InsertIntoTable();
+           } catch (SQLException ex) {
+               System.out.println(ex.getMessage());
+           } catch (InstantiationException ex) {
+                Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void InsertIntoTable() throws SQLException, InstantiationException {
         try{
-            conn = Connect.ConnectDB();
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            System.out.println("hilm");
-            /*s1.executeUpdate("INSERT INTO HAPPY.bill (name ,desig ,address ,date_of_joining  ,contact_no ) VALUES ('"+Name+"','"+Desig+"','"+Add+"','"+Doj+"','"+No+"')");
-            System.out.println("Done");*/
+            
+            s1.executeUpdate("INSERT INTO HAPPY.bill VALUES ('"+item+"',"+qty+","+amt+")");
+            System.out.println("Done");
             s1.close();
-            conn.close();
-            JOptionPane.showMessageDialog(null, "Employee Added");
-           // result.last();
+            
         }
     catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
@@ -472,11 +498,8 @@ public class Billing extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
+                
                     new Billing().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         });
     }

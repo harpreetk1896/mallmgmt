@@ -15,7 +15,7 @@ public class Connect {
         public static Connection ConnectDB(){
              try{
            
-          Class.forName("org.apache.derby.jdbc.ClientDriver");
+         Class.forName("org.apache.derby.jdbc.ClientDriver");
          Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/mallmgmt","happy","happy");
           return con;
             

@@ -37,7 +37,7 @@ public class MainFrame extends javax.swing.JFrame {
     try {
         Connection con=Connect.ConnectDB();
         Statement statement = con.createStatement();
-        String sql= "CREATE TABLE happy.bill (pname varchar(100),quantity integer,price integer";
+        String sql= "CREATE TABLE happy.bill (pname varchar(100),quantity integer,price integer)";
         statement.executeUpdate(sql);
         System.out.println("BIll created");
         sql= "CREATE TABLE happy.invoice (invoiceid integer not null primary key generated always as identity "
@@ -56,14 +56,14 @@ public class MainFrame extends javax.swing.JFrame {
                 + ",s_price integer)";
         statement.executeUpdate(sql);
         sql= "CREATE TABLE happy.stock (pid integer,distid integer ,Qty integer not null, "
-                + "Price integer not null,Date_of_delivery date,foreign key(distid) references happy.ditributor(distid),"
+                + "Price integer not null,Date_of_delivery date,foreign key(distid) references happy.distributor(distid),"
                 + "foreign key(pid) references happy.product(pid))";
         statement.executeUpdate(sql);
         //System.out.println("Table Sucessfully Created :  food");
         return true;
     }
     catch (SQLException e ) {
-        //System.out.println("An error has occured on Table Creation with Table ");
+        System.out.println("An error has occured on Table Creation with Table ");
         return false;
     }
 }
