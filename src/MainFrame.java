@@ -23,11 +23,15 @@ import javax.swing.JOptionPane;
 
 public class MainFrame extends javax.swing.JFrame {
 
-    Connection con=null;
-    ResultSet rs=null;
-    PreparedStatement pst=null;
+    /**
+     * Creates new form MainFrame
+     */
+    private static Connection con=null;
+    private static ResultSet rs=null;
+    private static PreparedStatement pst=null;
    
     protected static boolean createTable( ) {
+        System.setProperty("derby.system.home","C:/Users/Rishab/.netbeans-derby");
 
     try {
         Connection con=Connect.ConnectDB();
@@ -229,6 +233,8 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
+    
     private void handler() {    
            con=Connect.ConnectDB();
          char[] pass=  jPasswordField1.getPassword(); 

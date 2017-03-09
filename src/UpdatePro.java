@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -19,6 +21,7 @@ import javax.swing.JPanel;
  */
 public class UpdatePro extends javax.swing.JFrame {
 
+    String pid;
     
     public UpdatePro() {
         initComponents();
@@ -26,6 +29,40 @@ public class UpdatePro extends javax.swing.JFrame {
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
+        jComboBox1.requestFocus();
+        Connection con=Connect.ConnectDB();
+        ResultSet rs=null;
+        PreparedStatement pst=null;
+        ArrayList<String> p_names = new ArrayList<String>();
+        String p_id,p_name;
+        p_names.add("");
+        //String empid=jTextField1.getText();
+        String sql= "select pid,pname from happy.product";
+        
+        try
+        {
+            pst=con.prepareStatement(sql);
+            rs= pst.executeQuery();
+            System.out.println(rs);
+
+            while (rs.next() ){
+                p_id=rs.getString(1);
+                p_name=rs.getString(2);
+                p_names.add(p_name+" ~ "+p_id);
+            }
+   
+        }catch(HeadlessException e){
+            JOptionPane.showMessageDialog(null, e);
+
+        }   catch (SQLException ex) {
+            Logger.getLogger(DelEmp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String[] p_array = new String[p_names.size()];
+        p_array=p_names.toArray(p_array);
+        Arrays.sort(p_array);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(p_array));
+        AutoComplete.createAndShowGUI(jComboBox1); 
+        
     }
 
     
@@ -48,9 +85,9 @@ public class UpdatePro extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -174,7 +211,7 @@ public class UpdatePro extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Enter  Pro_ID");
+        jLabel1.setText("Enter  Product Name");
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton1.setText("Update");
@@ -201,6 +238,8 @@ public class UpdatePro extends javax.swing.JFrame {
             }
         });
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -211,35 +250,33 @@ public class UpdatePro extends javax.swing.JFrame {
                         .addGap(35, 35, 35)
                         .addComponent(jLabel3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
+                        .addGap(75, 75, 75)
                         .addComponent(jLabel1)
-                        .addGap(90, 90, 90)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(44, 44, 44)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55)
                         .addComponent(jButton7))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(305, 305, 305)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(67, 67, 67)
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(464, Short.MAX_VALUE))
+                .addContainerGap(504, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(68, 68, 68)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addGap(59, 59, 59)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addGap(59, 59, 59)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(541, Short.MAX_VALUE))
         );
 
@@ -249,7 +286,7 @@ public class UpdatePro extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 1093, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 48, Short.MAX_VALUE))
+                .addGap(0, 118, Short.MAX_VALUE))
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
@@ -321,7 +358,9 @@ public class UpdatePro extends javax.swing.JFrame {
         Connection con=Connect.ConnectDB();
         ResultSet rs=null;
         PreparedStatement pst=null;
-        String pid=jTextField1.getText();
+        String pro_choosen = jComboBox1.getSelectedItem().toString();
+        pid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
+        //pid=jTextField1.getText();
         String sql= "select * from happy.product where pid = " + pid;
         
         try
@@ -334,13 +373,11 @@ public class UpdatePro extends javax.swing.JFrame {
                 Info=rs.getString(3);
                 Price=rs.getString(5);
                 UpdateFramePro frm = new UpdateFramePro(pid,Name,Info,Price);
-                jTextField1.setText(null);
                 //frm.setVisible(true);
             }
             else{
 
                 JOptionPane.showMessageDialog(null, "P_ID not found","Error",JOptionPane.ERROR_MESSAGE);
-                jTextField1.setText("");
 
             }
         }catch(HeadlessException e){
@@ -409,6 +446,7 @@ public class UpdatePro extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
@@ -418,6 +456,5 @@ public class UpdatePro extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

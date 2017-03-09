@@ -32,6 +32,7 @@ public class AddEmployee extends javax.swing.JFrame {
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
+        jTextField1.requestFocus();
     }
 
     /**

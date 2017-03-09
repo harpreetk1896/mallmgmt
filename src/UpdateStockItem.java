@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -34,6 +36,39 @@ public class UpdateStockItem extends javax.swing.JFrame {
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
+        jComboBox1.requestFocus();
+        Connection con=Connect.ConnectDB();
+        ResultSet rs=null;
+        PreparedStatement pst=null;
+        ArrayList<String> p_names = new ArrayList<String>();
+        String p_id,p_name;
+        p_names.add("");
+        //String empid=jTextField1.getText();
+        String sql= "select pid,pname from happy.product";
+        
+        try
+        {
+            pst=con.prepareStatement(sql);
+            rs= pst.executeQuery();
+            System.out.println(rs);
+
+            while (rs.next() ){
+                p_id=rs.getString(1);
+                p_name=rs.getString(2);
+                p_names.add(p_name+" ~ "+p_id);
+            }
+   
+        }catch(HeadlessException e){
+            JOptionPane.showMessageDialog(null, e);
+
+        }   catch (SQLException ex) {
+            Logger.getLogger(DelEmp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String[] p_array = new String[p_names.size()];
+        p_array=p_names.toArray(p_array);
+        Arrays.sort(p_array);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(p_array));
+        AutoComplete.createAndShowGUI(jComboBox1); 
     }
 
     /**
@@ -60,11 +95,11 @@ public class UpdateStockItem extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -189,7 +224,7 @@ public class UpdateStockItem extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Enter  P_Name");
+        jLabel1.setText("Product Name");
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton1.setText("Update");
@@ -219,6 +254,8 @@ public class UpdateStockItem extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Quantity");
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -239,25 +276,24 @@ public class UpdateStockItem extends javax.swing.JFrame {
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
                         .addGap(90, 90, 90)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton7))
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(489, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton7)))
+                .addContainerGap(493, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(66, 66, 66)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGap(49, 49, 49)
                         .addComponent(jLabel3)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -318,7 +354,7 @@ public class UpdateStockItem extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-     private static String pname=null,Qty=null;
+     private static String pid=null,Qty=null;
          
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setVisible(true);
@@ -342,12 +378,13 @@ public class UpdateStockItem extends javax.swing.JFrame {
         // TODO add your handling code here:        
         Connection con=Connect.ConnectDB();
         Statement s1 =null;
-        pname=jTextField1.getText();
+        String pro_choosen = jComboBox1.getSelectedItem().toString();
+        pid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
         Qty=jTextField2.getText();
          try{
             
             s1= con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            s1.executeUpdate("Update HAPPY.product set qty = "+Qty+" where pname = '"+pname+"'");
+            s1.executeUpdate("Update HAPPY.STOCK set qty = "+Qty+" where pid = '"+pid+"'");
             
             s1.close();
             con.close();
@@ -359,7 +396,7 @@ public class UpdateStockItem extends javax.swing.JFrame {
     catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
           };
-          jTextField1.setText("");
+//          jTextField1.setText("");
           jTextField2.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -426,6 +463,7 @@ public class UpdateStockItem extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -436,7 +474,6 @@ public class UpdateStockItem extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
