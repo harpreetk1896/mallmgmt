@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +41,7 @@ public class Billing extends javax.swing.JFrame {
    
     private static String item=null,cust_name=null;
     private static int sr_no=0,qty=0,start_row=0,end_row=0,in_id=0;
-    double amt=0,total=0;
+    double amt=0,total=0;Date datetime;
     String[] columnNames = {"SR. NO","ITEM DESCRIPTION","QUANTITY","AMOUNT"};
     DefaultTableModel model ;
     
@@ -77,19 +80,21 @@ public class Billing extends javax.swing.JFrame {
 
         try {
             
-            pst = conn.prepareStatement("select s_price from happy.product where pname='"+item+"'");
+            pst = conn.prepareStatement("select s_price from happy.product where pname='"+item+"' and qty>="+qty);
             ResultSet rs = pst.executeQuery();
-            sr_no++;
+            
             rs.next();
+            
             amt=rs.getInt(1);
             amt*=qty;
+            sr_no++;
             
            model.addRow(new Object[]{sr_no,item,qty,amt});
            total+=amt;
            jLabel6.setText("Grand Total: "+total);
             
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Stock not available", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     @SuppressWarnings("unchecked")
@@ -223,7 +228,7 @@ public class Billing extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setText("Grand Total : 00.00");
+        jLabel6.setText("Total : 00.00");
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton7.setText("Generate Bill");
@@ -249,12 +254,10 @@ public class Billing extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
                                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(377, 377, 377)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jLabel3)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(67, 67, 67))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,18 +276,19 @@ public class Billing extends javax.swing.JFrame {
                                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel4)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel1))))
                 .addContainerGap(118, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(44, 44, 44)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
                 .addComponent(jLabel3)
                 .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -413,12 +417,16 @@ public class Billing extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // generate Bill
-        end_row=sr_no;
+        end_row=sr_no+start_row;
         cust_name=jTextField1.getText();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        datetime = new Date();
+        System.out.println(dateFormat.format(datetime));
         try{
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            s1.executeUpdate("INSERT INTO HAPPY.invoice (cust_name,startrow,endrow) VALUES ('"+cust_name+"',"+start_row+","+end_row+")");
+            s1.executeUpdate("INSERT INTO HAPPY.invoice (cust_name,startrow,endrow,date_time,total)"
+                    + " VALUES ('"+cust_name+"',"+start_row+","+end_row+",'"+datetime+"',"+total+")");
             pst = conn.prepareStatement("select invoiceid from happy.invoice where startrow="+start_row);
             ResultSet rs = pst.executeQuery();
             rs.next();
@@ -441,6 +449,16 @@ public class Billing extends javax.swing.JFrame {
             item=(String)c.elementAt(1);
             qty=(Integer)c.elementAt(2);
             amt=(Double)c.elementAt(3);
+            
+            Statement s1=null;
+            try {
+                s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                 s1.executeUpdate("Update HAPPY.product set qty = qty-"+qty+" where pname ='"+item+"'");
+            
+            } catch (SQLException ex) {
+                Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
             
             //System.out.println(""+item+" "+qty+":"+amt);
             try {
