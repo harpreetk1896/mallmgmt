@@ -27,6 +27,7 @@ public class DisplayProData extends JFrame  {
     String[] columnNames = {"P_id","Name","Info","Price"};
     String from;
     DefaultTableModel model; 
+    String sql = "select * from happy.product";
     
     DisplayProData() {
             
@@ -40,14 +41,15 @@ public class DisplayProData extends JFrame  {
         setVisible(true);
     }
 
-    DisplayProData(DefaultTableModel m) {
+    DisplayProData(DefaultTableModel m,String s) {
         model=m;
+        sql = s;
         showTableData();
        }
     public void showTableData() {
 
         model.setColumnIdentifiers(columnNames);
-
+        model.setRowCount(0);
         table = new JTable();
         table.setModel(model);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -62,7 +64,7 @@ public class DisplayProData extends JFrame  {
 
         try {
             conn = Connect.ConnectDB();
-            pst = conn.prepareStatement("select * from happy.product");
+            pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             int i = 0;
             while (rs.next()) {

@@ -17,7 +17,6 @@ public class Connect {
            
           Class.forName("org.apache.derby.jdbc.ClientDriver");
          Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/mallmgm","rishab","rishab");
-         System.out.println("Is line mein koi dikkt hai");
           return con;
             
         }catch(ClassNotFoundException | SQLException e){

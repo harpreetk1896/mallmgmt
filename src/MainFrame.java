@@ -60,8 +60,8 @@ public class MainFrame extends javax.swing.JFrame {
                 + ",s_price integer)";
         statement.executeUpdate(sql);
         sql= "CREATE TABLE happy.stock (pid integer,distid integer ,Qty integer not null, "
-                + "Price integer not null,Date_of_delivery date,foreign key(distid) references happy.distributor(distid),"
-                + "foreign key(pid) references happy.product(pid))";
+                + "Price integer not null,Date_of_delivery date,foreign key(distid) references happy.distributor(distid) on delete cascade,"
+                + "foreign key(pid) references happy.product(pid) on delete cascade)";
         statement.executeUpdate(sql);
         //System.out.println("Table Sucessfully Created :  food");
         return true;
