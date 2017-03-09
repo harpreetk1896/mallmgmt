@@ -1,4 +1,5 @@
 
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,6 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -34,69 +41,96 @@ public class Billing extends javax.swing.JFrame {
     ResultSet  rs1;
     Statement  st1;
     PreparedStatement pst;
-    static JTable table;
-    private static String item=null,invoice_no=null,cust_name=null;
-    private static int sr_no=1,qty=0,amt=0,start_row=0,end_row=0,pid=0;
-    String[] columnNames = {"SR. NO","ITEM DESCRIPTION","QUANTITY","AMOUNT"};
+   
+    private static String item=null,itemid=null,cust_name=null;
+    private int sr_no=0,qty=0,start_row=0,end_row=0,in_id=0;
+    double amt=0,total=0;Date datetime;
+    String[] columnNames = {"SR. NO","ITEM DESCRIPTION","QUANTITY","AMOUNT PAID"};
     DefaultTableModel model ;
     
-    public Billing() throws SQLException {
+    public Billing() {
         initComponents();
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
-        conn = Connect.ConnectDB();
-        pst = conn.prepareStatement("select count(*) from happy.bill");
-        ResultSet rs = pst.executeQuery();
-        start_row=rs.getInt(1);
         this.setSize(x,y);
+        model=new DefaultTableModel();
+        model.setColumnIdentifiers(columnNames);
+        jTable1.setModel(model);
+        
+        conn = Connect.ConnectDB();
+        try {
+            getCount();
+        } catch (SQLException ex) {
+            Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jComboBox1.requestFocus();
+        Connection con=Connect.ConnectDB();
+        ResultSet rs=null;
+        PreparedStatement pst=null;
+        ArrayList<String> p_names = new ArrayList<String>();
+        String p_id,p_name;
+        p_names.add("");
+        //String empid=jTextField1.getText();
+        String sql= "select pid,pname from happy.product";
+        
+        try
+        {
+            pst=con.prepareStatement(sql);
+            rs= pst.executeQuery();
+            System.out.println(rs);
+
+            while (rs.next() ){
+                p_id=rs.getString(1);
+                p_name=rs.getString(2);
+                p_names.add(p_name+" ~ "+p_id);
+            }
+   
+        }catch(HeadlessException e){
+            JOptionPane.showMessageDialog(null, e);
+
+        }   catch (SQLException ex) {
+            Logger.getLogger(DelEmp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String[] p_array = new String[p_names.size()];
+        p_array=p_names.toArray(p_array);
+        Arrays.sort(p_array);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(p_array));
+        AutoComplete.createAndShowGUI(jComboBox1); 
     }
 
+    void getCount() throws SQLException
+    {
+        pst = conn.prepareStatement("select count(*) from happy.bill");
+        ResultSet rs = pst.executeQuery();
+        rs.next();
+        start_row=rs.getInt(1)+1;
+    }
+    
+    
      public void showTable() {
-         model.setColumnIdentifiers(columnNames);
-        table = new JTable();
-        table.setModel(model);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        table.setFillsViewportHeight(true);
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.setHorizontalScrollBarPolicy(
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scroll.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-       
-        
+      
+        jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable1.setFillsViewportHeight(true);
 
         try {
-            conn = Connect.ConnectDB();
-            pst = conn.prepareStatement("select pid from happy.product where pname="+item);
-            ResultSet rs = pst.executeQuery();
-            pid=rs.getInt(1);
             
-            pst = conn.prepareStatement("select price from happy.stock where pid="+pid);
-            rs = pst.executeQuery();
-            int i = 0;
-            while (rs.next()) {
-                /*Name = rs.getString("dname");
-                Add = rs.getString("daddress");
-                distid = rs.getString("distid");
-                No = rs.getString("dcontact_no");
-                
-                model.addRow(new Object[]{distid,Name,No,Add});
-                //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
-                i++;*/
-            }
-            if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (i == 1) {
-                //System.out.println(i + " Record Found");
-            } else {
-                //System.out.println(i + " Records Found");
-            }
+            pst = conn.prepareStatement("select qty from happy.product where pid='"+itemid+"'");
+            ResultSet rs = pst.executeQuery();
+            System.out.println(rs);
+            rs.next();
+            
+            amt=rs.getInt(1);
+            amt*=qty;
+            sr_no++;
+            
+           model.addRow(new Object[]{sr_no,item,qty,amt});
+           total+=amt;
+           jLabel6.setText("Grand Total: "+total);
+            
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Stock not available", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        add(scroll);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -108,6 +142,7 @@ public class Billing extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -116,7 +151,6 @@ public class Billing extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -125,6 +159,7 @@ public class Billing extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jTextField3 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
 
@@ -165,10 +200,21 @@ public class Billing extends javax.swing.JFrame {
         jButton5.setBackground(new java.awt.Color(0, 102, 102));
         jButton5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("View Bills");
+        jButton5.setText("View Bill");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton10.setBackground(new java.awt.Color(0, 102, 102));
+        jButton10.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton10.setForeground(new java.awt.Color(255, 255, 255));
+        jButton10.setText("View Transactions");
+        jButton10.setBorder(null);
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
             }
         });
 
@@ -180,7 +226,8 @@ public class Billing extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -189,8 +236,10 @@ public class Billing extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(596, Short.MAX_VALUE))
+                .addContainerGap(543, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -221,20 +270,14 @@ public class Billing extends javax.swing.JFrame {
         });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
+            new Object [][] {},
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setText("Grand Total : 00.00");
+        jLabel6.setText("Total : 00.00");
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton7.setText("Generate Bill");
@@ -246,6 +289,8 @@ public class Billing extends javax.swing.JFrame {
 
         jLabel4.setText("Discount ( if any)");
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -256,49 +301,43 @@ public class Billing extends javax.swing.JFrame {
                         .addGap(52, 52, 52)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(377, 377, 377))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(45, 45, 45)))
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(425, 425, 425)
+                                .addGap(24, 24, 24)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(91, 91, 91)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel3)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(67, 67, 67))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jLabel6)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 908, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 908, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jButton7)
                                     .addGap(71, 71, 71)
                                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel4)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel1))))
                 .addContainerGap(118, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
+                .addGap(44, 44, 44)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(32, 32, 32)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
                 .addComponent(jLabel3)
                 .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -306,9 +345,9 @@ public class Billing extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(41, 41, 41)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -395,20 +434,24 @@ public class Billing extends javax.swing.JFrame {
 
      
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        item=jTextField2.getText();
+        String pro_choosen = jComboBox1.getSelectedItem().toString();
+        itemid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
+        item = pro_choosen.substring(0,pro_choosen.lastIndexOf("~") - 2);
         qty=Integer.parseInt(jTextField5.getText());
         
-        System.out.println();
         showTable();
        
-        jTextField2.setText(null);
         jTextField5.setText(null);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // Back Button
+        try {
+            // Back Button
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Mainpage frm = new Mainpage();
           frm.setVisible(true);
           setVisible(false);
@@ -423,20 +466,69 @@ public class Billing extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // generate Bill
+        end_row=sr_no+start_row;
+        cust_name=jTextField1.getText();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        datetime = new Date();
+        String date=dateFormat.format(datetime);
+        System.out.println(date);
+        try{
+            Statement s1 =null;
+            s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            s1.executeUpdate("INSERT INTO HAPPY.invoice (cust_name,startrow,endrow,date_time,total)"
+                    + " VALUES ('"+cust_name+"',"+start_row+","+end_row+",'"+date+"',"+total+")");
+            pst = conn.prepareStatement("select invoiceid from happy.invoice where startrow="+start_row);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            in_id=rs.getInt(1);
+            System.out.println(""+in_id);
+            
+            s1.close();
+       
+            Vector v= model.getDataVector();
+            for(int i=0;i<sr_no;i++)
+            {
+                Vector c=(Vector)v.elementAt(i);
+                item=(String)c.elementAt(1);
+                qty=(Integer)c.elementAt(2);
+                amt=(Double)c.elementAt(3);
+                s1=null;
+                try {
+                    s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                     s1.executeUpdate("Update HAPPY.product set qty = qty-"+qty+" where pname ='"+item+"'");
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);};
+
+                try {
+                   InsertIntoTable();
+                    } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                    } catch (InstantiationException ex) {
+                    Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);}
+            }
+       }
+        catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
+          };
+        
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // TODO add your handling code here:
+        new ViewTransaction().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jButton10ActionPerformed
 
     private void InsertIntoTable() throws SQLException, InstantiationException {
         try{
-            conn = Connect.ConnectDB();
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            System.out.println("hilm");
-            /*s1.executeUpdate("INSERT INTO HAPPY.bill (name ,desig ,address ,date_of_joining  ,contact_no ) VALUES ('"+Name+"','"+Desig+"','"+Add+"','"+Doj+"','"+No+"')");
-            System.out.println("Done");*/
+            
+            s1.executeUpdate("INSERT INTO HAPPY.bill VALUES ('"+item+"',"+qty+","+amt+")");
+            System.out.println("Done");
             s1.close();
-            conn.close();
-            JOptionPane.showMessageDialog(null, "Employee Added");
-           // result.last();
+            
         }
     catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
@@ -472,11 +564,8 @@ public class Billing extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
+                
                     new Billing().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         });
     }
@@ -484,10 +573,12 @@ public class Billing extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -504,7 +595,6 @@ public class Billing extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables

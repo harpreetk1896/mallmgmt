@@ -105,6 +105,11 @@ public class Mainpage extends javax.swing.JFrame {
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/inventory_icon.jpg"))); // NOI18N
         jLabel8.setText("jLabel2");
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Product");
@@ -282,6 +287,17 @@ public class Mainpage extends javax.swing.JFrame {
         
         setVisible(false);
     }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        // TODO add your handling code here:
+        Billing frm= new Billing();
+        
+        bill= new Billing();
+        bill.setVisible(true);
+        frm.setVisible(true);
+        
+        setVisible(false);
+    }//GEN-LAST:event_jLabel8MouseClicked
 
     /**
      * @param args the command line arguments

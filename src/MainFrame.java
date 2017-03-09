@@ -1,10 +1,6 @@
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.HeadlessException;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -13,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -45,7 +40,8 @@ public class MainFrame extends javax.swing.JFrame {
         statement.executeUpdate(sql);
         System.out.println("BIll created");
         sql= "CREATE TABLE happy.invoice (invoiceid integer not null primary key generated always as identity "
-                + "(start with 1001,increment by 1),cust_name varchar(40),startrow integer, endrow integer)";
+                + "(start with 1001,increment by 1),cust_name varchar(40),startrow integer, endrow integer,"
+                + "date_time timestamp,total integer)";
         statement.executeUpdate(sql);
         System.out.println("BIlkl created");
          sql= "CREATE TABLE happy.employee (empid integer not null primary key generated always as identity "
@@ -67,7 +63,7 @@ public class MainFrame extends javax.swing.JFrame {
         return true;
     }
     catch (SQLException e ) {
-        //System.out.println("An error has occured on Table Creation with Table ");
+        System.out.println("An error has occured on Table Creation with Table ");
         return false;
     }
 }

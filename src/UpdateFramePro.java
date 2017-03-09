@@ -36,6 +36,7 @@ public class UpdateFramePro extends javax.swing.JFrame {
         initComponents();
         jTextField1.setText(Name);
         jTextField5.setText(Info);
+        jTextField2.setText(Price);
         setVisible(true);
     }
 
@@ -146,7 +147,7 @@ public class UpdateFramePro extends javax.swing.JFrame {
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             
-            s1.executeUpdate("Update HAPPY.Product set PName = '"+Name+"', Pinfo ='"+Info+"',S_price ='"+Price+"' where pid = "+Pid);
+            s1.executeUpdate("Update HAPPY.Product set PName = '"+Name+"', Pinfo ='"+Info+"',S_price ="+Price+" where pid = "+Pid);
             
             s1.close();
             conn.close();
@@ -164,7 +165,7 @@ public class UpdateFramePro extends javax.swing.JFrame {
         // TODO add your handling code here:
         Name=jTextField1.getText();
         Info=jTextField5.getText();
-
+        Price=jTextField2.getText();
         System.out.println();
         try {
            UpdateTable();
