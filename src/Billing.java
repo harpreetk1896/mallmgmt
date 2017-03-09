@@ -40,7 +40,7 @@ public class Billing extends javax.swing.JFrame {
     PreparedStatement pst;
    
     private static String item=null,cust_name=null;
-    private static int sr_no=0,qty=0,start_row=0,end_row=0,in_id=0;
+    private int sr_no=0,qty=0,start_row=0,end_row=0,in_id=0;
     double amt=0,total=0;Date datetime;
     String[] columnNames = {"SR. NO","ITEM DESCRIPTION","QUANTITY","AMOUNT PAID"};
     DefaultTableModel model ;
@@ -53,7 +53,6 @@ public class Billing extends javax.swing.JFrame {
         this.setSize(x,y);
         model=new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
-        //jTable1 = new JTable();
         jTable1.setModel(model);
         
         conn = Connect.ConnectDB();
@@ -69,7 +68,7 @@ public class Billing extends javax.swing.JFrame {
         pst = conn.prepareStatement("select count(*) from happy.bill");
         ResultSet rs = pst.executeQuery();
         rs.next();
-        start_row=rs.getInt(1);
+        start_row=rs.getInt(1)+1;
     }
     
     
@@ -237,7 +236,6 @@ public class Billing extends javax.swing.JFrame {
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {},
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
         jScrollPane1.setViewportView(jTable1);

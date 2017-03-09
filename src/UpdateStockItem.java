@@ -381,10 +381,11 @@ public class UpdateStockItem extends javax.swing.JFrame {
         String pro_choosen = jComboBox1.getSelectedItem().toString();
         pid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
         Qty=jTextField2.getText();
+        System.out.println(pid+":"+Qty);
          try{
             
             s1= con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            s1.executeUpdate("Update HAPPY.STOCK set qty = "+Qty+" where pid = '"+pid+"'");
+            s1.executeUpdate("Update HAPPY.product set qty = "+Qty+" where pid = "+pid);
             
             s1.close();
             con.close();
