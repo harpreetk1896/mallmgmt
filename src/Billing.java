@@ -42,7 +42,7 @@ public class Billing extends javax.swing.JFrame {
     private static String item=null,cust_name=null;
     private static int sr_no=0,qty=0,start_row=0,end_row=0,in_id=0;
     double amt=0,total=0;Date datetime;
-    String[] columnNames = {"SR. NO","ITEM DESCRIPTION","QUANTITY","AMOUNT"};
+    String[] columnNames = {"SR. NO","ITEM DESCRIPTION","QUANTITY","AMOUNT PAID"};
     DefaultTableModel model ;
     
     public Billing() {
@@ -107,6 +107,7 @@ public class Billing extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -171,6 +172,17 @@ public class Billing extends javax.swing.JFrame {
             }
         });
 
+        jButton10.setBackground(new java.awt.Color(0, 102, 102));
+        jButton10.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jButton10.setForeground(new java.awt.Color(255, 255, 255));
+        jButton10.setText("View Transactions");
+        jButton10.setBorder(null);
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -179,7 +191,8 @@ public class Billing extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -188,8 +201,10 @@ public class Billing extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(596, Short.MAX_VALUE))
+                .addContainerGap(543, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -419,14 +434,15 @@ public class Billing extends javax.swing.JFrame {
         // generate Bill
         end_row=sr_no+start_row;
         cust_name=jTextField1.getText();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         datetime = new Date();
-        System.out.println(dateFormat.format(datetime));
+        String date=dateFormat.format(datetime);
+        System.out.println(date);
         try{
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             s1.executeUpdate("INSERT INTO HAPPY.invoice (cust_name,startrow,endrow,date_time,total)"
-                    + " VALUES ('"+cust_name+"',"+start_row+","+end_row+",'"+datetime+"',"+total+")");
+                    + " VALUES ('"+cust_name+"',"+start_row+","+end_row+",'"+date+"',"+total+")");
             pst = conn.prepareStatement("select invoiceid from happy.invoice where startrow="+start_row);
             ResultSet rs = pst.executeQuery();
             rs.next();
@@ -434,43 +450,41 @@ public class Billing extends javax.swing.JFrame {
             System.out.println(""+in_id);
             
             s1.close();
-         }
+       
+            Vector v= model.getDataVector();
+            for(int i=0;i<sr_no;i++)
+            {
+                Vector c=(Vector)v.elementAt(i);
+                item=(String)c.elementAt(1);
+                qty=(Integer)c.elementAt(2);
+                amt=(Double)c.elementAt(3);
+                s1=null;
+                try {
+                    s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                     s1.executeUpdate("Update HAPPY.product set qty = qty-"+qty+" where pname ='"+item+"'");
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);};
+
+                try {
+                   InsertIntoTable();
+                    } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                    } catch (InstantiationException ex) {
+                    Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);}
+            }
+       }
         catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
           };
         
-        
-        
-        Vector v= model.getDataVector();
-        System.out.println(""+sr_no);
-        for(int i=0;i<sr_no;i++)
-        {
-            Vector c=(Vector)v.elementAt(i);
-            item=(String)c.elementAt(1);
-            qty=(Integer)c.elementAt(2);
-            amt=(Double)c.elementAt(3);
-            
-            Statement s1=null;
-            try {
-                s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                 s1.executeUpdate("Update HAPPY.product set qty = qty-"+qty+" where pname ='"+item+"'");
-            
-            } catch (SQLException ex) {
-                Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
-            }
-           
-            
-            //System.out.println(""+item+" "+qty+":"+amt);
-            try {
-               InsertIntoTable();
-           } catch (SQLException ex) {
-               System.out.println(ex.getMessage());
-           } catch (InstantiationException ex) {
-                Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // TODO add your handling code here:
+        new ViewTransaction().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jButton10ActionPerformed
 
     private void InsertIntoTable() throws SQLException, InstantiationException {
         try{
@@ -525,6 +539,7 @@ public class Billing extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;

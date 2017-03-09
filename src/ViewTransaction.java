@@ -1,10 +1,12 @@
 
-
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -20,18 +22,56 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Harpreet Kaur
  */
-public class ViewBill extends javax.swing.JFrame {
+public class ViewTransaction extends javax.swing.JFrame {
 
+    Connection conn;
+    PreparedStatement ps;
+    ResultSet rs;
+    String invoiceid=null,datetime=null,cust_name=null,amt=null;
+    String[] columnNames = {"Invoice_id","Cust_Name","Date/Time","Amount Paid"};
     DefaultTableModel model;
-    public ViewBill() {
+    
+    public ViewTransaction() {
         model = new DefaultTableModel();
         initComponents();
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
-   
-        this.setSize(x,y);
-        //new DisplayStockData(model);
+        model.setColumnIdentifiers(columnNames);
+        jTable1.setModel(model);
+        try {
+            viewBill();
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewTransaction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void viewBill() throws SQLException
+    {
+        
+        jTable1.setFillsViewportHeight(true);
+        
+        
+        conn=Connect.ConnectDB();
+        String sql="Select * from happy.invoice";
+        ps=conn.prepareStatement(sql);
+        rs=ps.executeQuery();
+        int i = 0;
+            while (rs.next()) {
+                invoiceid = rs.getString("invoiceid");
+                cust_name = rs.getString("cust_name");
+                datetime = rs.getString("date_time");
+                amt = rs.getString("total");
+                
+                model.addRow(new Object[]{invoiceid,cust_name,datetime,amt});
+                //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
+                i++;
+            }
+            if (i < 1) {
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        conn.close();
     }
     
     @SuppressWarnings("unchecked")
@@ -87,7 +127,8 @@ public class ViewBill extends javax.swing.JFrame {
         jButton5.setBackground(new java.awt.Color(0, 102, 102));
         jButton5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("View Transactions");
+        jButton5.setText("View Bill");
+        jButton5.setBorder(null);
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -107,7 +148,7 @@ public class ViewBill extends javax.swing.JFrame {
         jButton9.setBackground(new java.awt.Color(0, 102, 102));
         jButton9.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jButton9.setForeground(new java.awt.Color(255, 255, 255));
-        jButton9.setText("View Bill");
+        jButton9.setText("View Transactions");
         jButton9.setBorder(null);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -128,9 +169,9 @@ public class ViewBill extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(543, Short.MAX_VALUE))
         );
 
@@ -181,7 +222,7 @@ public class ViewBill extends javax.swing.JFrame {
         jPanel5.setPreferredSize(new java.awt.Dimension(1082, 54));
 
         jLabel9.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        jLabel9.setText("View  Bill");
+        jLabel9.setText("View  Transaction");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -252,7 +293,7 @@ public class ViewBill extends javax.swing.JFrame {
         Mainpage frm = new Mainpage();
         frm.setVisible(true);
         setVisible(false);
-        Mainpage.stock.setVisible(false);
+        Mainpage.bill.setVisible(false);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -262,8 +303,8 @@ public class ViewBill extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // ViewTransaction
-        new ViewTransaction().setVisible(true);
+        // View Bill
+        new ViewBill().setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -297,7 +338,7 @@ public class ViewBill extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-               new ViewBill().setVisible(true);
+               new ViewTransaction().setVisible(true);
             }
         });
     }
