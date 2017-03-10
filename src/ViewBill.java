@@ -29,7 +29,7 @@ public class ViewBill extends javax.swing.JFrame {
     PreparedStatement pst;
    
     private static String item=null,cust_name=null,date=null,in_id=null;
-    private static int sr_no=0,qty=0,start_row=0,end_row=0;
+    private int sr_no=0,qty=0,start_row=0,end_row=0;
     double amt=0,total=0;
     String[] columnNames = {"SR. NO","ITEM DESCRIPTION","QUANTITY","AMOUNT PAID"};
     DefaultTableModel model ;
@@ -62,29 +62,30 @@ public class ViewBill extends javax.swing.JFrame {
             
             rs.next();
             cust_name=rs.getString(2);
-            start_row=Integer.parseInt(rs.getString(3));
+            start_row=Integer.parseInt(rs.getString(3))-1;
             end_row=Integer.parseInt(rs.getString(4));
             total=Double.parseDouble(rs.getString(6));
             date=rs.getString(5);
             
+            System.out.println(start_row+":"+end_row);
             jLabel2.setText("Customer Name: "+cust_name);
             jLabel3.setText(date);
+            int diff=end_row-start_row;
             
-            pst = conn.prepareStatement("select * from happy.bill where row_number between "+start_row+" and "+end_row);
+            pst = conn.prepareStatement("select * from happy.bill offset "+start_row+" rows fetch next "+diff+"rows only");
             rs = pst.executeQuery();
-            
-            while(rs.next());
+            while(rs.next())
             {
-                 item=rs.getString(1);
-                 qty=rs.getInt(2);
-                 amt=rs.getInt(3);
+                 item=rs.getString("pname");
+                 qty=rs.getInt("Quantity");
+                 amt=rs.getInt("price");
                  sr_no++;
                  model.addRow(new Object[]{sr_no,item,qty,amt});
               }
             model.addRow(new Object[]{"","Total","",total});
             
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,"Invalid Invoice_ID", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     @SuppressWarnings("unchecked")
@@ -361,6 +362,7 @@ public class ViewBill extends javax.swing.JFrame {
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
         if (evt.getKeyCode()==KeyEvent.VK_ENTER)
         {
+            sr_no=0;
             in_id=jTextField1.getText();
             showTable();
         }      

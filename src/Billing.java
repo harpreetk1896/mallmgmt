@@ -430,7 +430,7 @@ public class Billing extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // generate Bill
-        end_row=sr_no+start_row;
+        end_row=sr_no+start_row-1;
         cust_name=jTextField1.getText();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         datetime = new Date();
