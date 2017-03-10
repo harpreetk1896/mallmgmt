@@ -115,7 +115,7 @@ public class Billing extends javax.swing.JFrame {
 
         try {
             
-            pst = conn.prepareStatement("select qty from happy.product where pid='"+itemid+"'");
+            pst = conn.prepareStatement("select s_price from happy.product where pid="+itemid+"and qty>="+qty);
             ResultSet rs = pst.executeQuery();
             System.out.println(rs);
             rs.next();
@@ -344,10 +344,11 @@ public class Billing extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(41, 41, 41)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -436,7 +437,7 @@ public class Billing extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String pro_choosen = jComboBox1.getSelectedItem().toString();
         itemid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
-        item = pro_choosen.substring(0,pro_choosen.lastIndexOf("~") - 2);
+        item = pro_choosen.substring(0,pro_choosen.lastIndexOf("~") - 1);
         qty=Integer.parseInt(jTextField5.getText());
         
         showTable();
