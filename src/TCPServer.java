@@ -24,7 +24,7 @@ public class TCPServer implements Runnable{
 
 	public static void start() throws IOException {
             System.out.println(InetAddress.getLocalHost());
-		int portNumber = 91;
+		int portNumber = 1504;
 		System.out.println("Creating server socket on port " + portNumber);
 		ServerSocket serverSocket = new ServerSocket(portNumber);
                 Socket socket = serverSocket.accept();
@@ -35,6 +35,9 @@ public class TCPServer implements Runnable{
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String str = br.readLine();
+                        if(str.contains("!"))
+                        BarcodeInput.setInput(str.substring(str.lastIndexOf("!")+1));
+                        else
                         BarcodeInput.setInput(str);
                         System.out.println(BarcodeInput.getInput());
 		}

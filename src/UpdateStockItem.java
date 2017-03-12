@@ -385,7 +385,7 @@ public class UpdateStockItem extends javax.swing.JFrame {
          try{
             
             s1= con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            s1.executeUpdate("Update HAPPY.product set qty = "+Qty+" where pid = "+pid);
+            s1.executeUpdate("Update HAPPY.product set qty = "+Qty+" where pid = '"+pid+"'");
             
             s1.close();
             con.close();

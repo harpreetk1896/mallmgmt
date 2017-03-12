@@ -340,12 +340,12 @@ public class ViewPro extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String search_text = jTextField1.getText();
         if (search_text.matches("[0-9]+") && search_text.length() > 1)
-        sql_query = "select * from happy.product where pid = "+search_text
+        sql_query = "select * from happy.product where pid like "+"'%"+search_text+"%'"
                 +" or pname like "+"'%"+search_text+"%'"+" or pinfo like "+"'%"+search_text+"%'"+
                 " or qty = "+search_text+" or s_price = "+search_text;
         else
         sql_query = "select * from happy.product where pname like "+"'%"+search_text+"%'"+""
-                + " or pinfo like "+"'%"+search_text+"%'";
+                + " or pinfo like "+"'%"+search_text+"%'" + " or pid like "+"'%"+search_text+"%'";
         DisplayProData dst=new DisplayProData(model,sql_query);
         jTextField1.requestFocus();
     }//GEN-LAST:event_jButton1ActionPerformed

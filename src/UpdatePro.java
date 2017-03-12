@@ -361,7 +361,7 @@ public class UpdatePro extends javax.swing.JFrame {
         String pro_choosen = jComboBox1.getSelectedItem().toString();
         pid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
         //pid=jTextField1.getText();
-        String sql= "select * from happy.product where pid = " + pid;
+        String sql= "select * from happy.product where pid = '" + pid+"'";
         
         try
         {

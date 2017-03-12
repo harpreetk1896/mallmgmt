@@ -354,7 +354,7 @@ public class DelPro extends javax.swing.JFrame {
         PreparedStatement pst=null;
         String pro_choosen = jComboBox1.getSelectedItem().toString();
         pid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
-        String sql= "select * from happy.product where pid = " + pid + "";
+        String sql= "select * from happy.product where pid = '" + pid + "'";
       //System.out.println(sql);
       try
       {
@@ -365,9 +365,8 @@ public class DelPro extends javax.swing.JFrame {
              //this.hide();
              //System.out.println("happu");
              
-             String str= " DELETE FROM happy.product WHERE pid = ?"; 
+             String str= " DELETE FROM happy.product WHERE pid = '"+pid+"'"; 
              PreparedStatement st = con.prepareStatement(str);
-             st.setString(1,pid);
              st.executeUpdate(); 
              JOptionPane.showMessageDialog(null, "Product Deleted");
           }

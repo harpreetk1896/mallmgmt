@@ -147,7 +147,7 @@ public class UpdateFramePro extends javax.swing.JFrame {
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             
-            s1.executeUpdate("Update HAPPY.Product set PName = '"+Name+"', Pinfo ='"+Info+"',S_price ="+Price+" where pid = "+Pid);
+            s1.executeUpdate("Update HAPPY.Product set PName = '"+Name+"', Pinfo ='"+Info+"',S_price ="+Price+" where pid = '"+Pid+"'");
             
             s1.close();
             conn.close();

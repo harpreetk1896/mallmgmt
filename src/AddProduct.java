@@ -1,4 +1,5 @@
 
+
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,6 +35,7 @@ public class AddProduct extends javax.swing.JFrame{
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
+        jTextField4.requestFocus();
     }
 
     /**
@@ -345,6 +347,7 @@ public class AddProduct extends javax.swing.JFrame{
         // TODO add your handling code here:
         Pid=jTextField4.getText();
         Name=jTextField1.getText();
+        Name=Name.substring(0,1)+Name.substring(1);
         Info=jTextField2.getText();
         Price=jTextField3.getText();
         
@@ -359,6 +362,9 @@ public class AddProduct extends javax.swing.JFrame{
         jTextField1.setText(null);
         jTextField2.setText(null);
         jTextField3.setText(null);
+        jTextField4.setText(null);
+        jTextField4.requestFocus();
+        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -395,22 +401,22 @@ public class AddProduct extends javax.swing.JFrame{
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void jTextField4FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField4FocusGained
-        System.out.println("aaya");
-        System.out.println(jTextField4.isFocusOwner());
-        while(jTextField4.isFocusOwner())
-        {
-            if(BarcodeInput.has_input)
-            {
-                System.out.println("Hai");
-                jTextField4.setText(BarcodeInput.getInput());
-                jTextField2.requestFocus();
-                try {
-                    wait(500);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(AddProduct.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                while(jTextField4.isFocusOwner()) 
+                {
+                    if(BarcodeInput.has_input)
+                    {
+                        jTextField4.setText(BarcodeInput.getInput());
+                        jTextField1.requestFocus();
+                        System.out.println("She");
+                        Thread.currentThread().stop();
+                        System.out.println("he");
+                    }
+                }               
             }
-        }
+        }).start();
     }//GEN-LAST:event_jTextField4FocusGained
 
     private static void InsertIntoTable() throws SQLException, InstantiationException {
@@ -419,7 +425,7 @@ public class AddProduct extends javax.swing.JFrame{
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             
-            s1.executeUpdate("INSERT INTO HAPPY.Product (pid,pname ,pinfo,s_price ) VALUES ('"+Name+"','"+Info+"',"+Price+")");
+            s1.executeUpdate("INSERT INTO HAPPY.Product (pid,pname ,pinfo,s_price ) VALUES ('"+Pid+"','"+Name+"','"+Info+"',"+Price+")");
             System.out.println("Done");
             s1.close();
             conn.close();
@@ -461,8 +467,6 @@ public class AddProduct extends javax.swing.JFrame{
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                new AddProduct().setVisible(true);
-               Thread t1 = new Thread(new TCPServer());
-               t1.start();
                
             }
         });

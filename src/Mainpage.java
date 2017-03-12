@@ -226,7 +226,6 @@ public class Mainpage extends javax.swing.JFrame {
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         // TODO add your handling code here:
         AddEmployee frm= new AddEmployee();
-        
         emp= new AddEmployee();
         emp.setVisible(true);
         frm.setVisible(true);
@@ -270,7 +269,6 @@ public class Mainpage extends javax.swing.JFrame {
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         AddProduct frm= new AddProduct();
-        
         pro= new AddProduct();
         pro.setVisible(true);
         frm.setVisible(true);
@@ -280,18 +278,17 @@ public class Mainpage extends javax.swing.JFrame {
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         AddStockItem frm= new AddStockItem();
-        
         stock= new AddStockItem();
         stock.setVisible(true);
         frm.setVisible(true);
-        
         setVisible(false);
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         // TODO add your handling code here:
         Billing frm= new Billing();
-        
+        Thread t1 = new Thread(new TCPServer());
+        t1.start();
         bill= new Billing();
         bill.setVisible(true);
         frm.setVisible(true);

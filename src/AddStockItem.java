@@ -512,7 +512,7 @@ public class AddStockItem extends javax.swing.JFrame {
             s1.executeUpdate("INSERT INTO HAPPY.Stock VALUES ("+Pid+","+Distid+","+Qty+","+Price+",'"+Date+"')");
             System.out.println("Done");
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            s1.executeUpdate("Update HAPPY.product set qty = qty+"+Qty+" where pid = "+Pid);
+            s1.executeUpdate("Update HAPPY.product set qty = qty+"+Qty+" where pid = '"+Pid+"'");
             
             s1.close();
             conn.close();
