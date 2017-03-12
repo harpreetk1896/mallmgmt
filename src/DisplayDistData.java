@@ -21,12 +21,10 @@ public class DisplayDistData extends JFrame  {
     ResultSet  rs1;
     Statement  st1;
     PreparedStatement pst;
-    String ids;
     static JTable table;
     private static String Name=null,Add=null,No=null,distid=null;
     String[] columnNames = {"Distid","Name","Contact_No","Address"};
-    String from;
-
+   
     DefaultTableModel model ;
     DisplayDistData() {
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -47,7 +45,7 @@ public class DisplayDistData extends JFrame  {
     //public void showTableData(DefaultTableModel m){model=m;showTable();}
     
     public void showTable() {
-         model.setColumnIdentifiers(columnNames);
+        model.setColumnIdentifiers(columnNames);
         table = new JTable();
         table.setModel(model);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

@@ -1,8 +1,19 @@
 
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import static java.awt.print.Printable.PAGE_EXISTS;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,7 +43,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Harpreet Kaur
  */
-public class Billing extends javax.swing.JFrame {
+public class Billing extends javax.swing.JFrame implements Printable{
 
     /**
      * Creates new form AddEmployee
@@ -41,12 +52,14 @@ public class Billing extends javax.swing.JFrame {
     ResultSet  rs1;
     Statement  st1;
     PreparedStatement pst;
-   
+  
     private static String item=null,itemid=null,cust_name=null;
     private int sr_no=0,qty=0,start_row=0,end_row=0,in_id=0;
     double amt=0,total=0;Date datetime;
     String[] columnNames = {"SR. NO","ITEM DESCRIPTION","QUANTITY","AMOUNT PAID"};
     DefaultTableModel model ;
+    
+    
     
     public Billing() {
         initComponents();
@@ -56,6 +69,8 @@ public class Billing extends javax.swing.JFrame {
         this.setSize(x,y);
         model=new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
+        
+        
         jTable1.setModel(model);
         
         conn = Connect.ConnectDB();
@@ -467,6 +482,12 @@ public class Billing extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // generate Bill
+        //Opening a file
+        PrintWriter writer=null;
+        try{
+            writer = new PrintWriter("Bill.txt", "UTF-8");
+        }catch (IOException e) {}
+        
         end_row=sr_no+start_row-1;
         cust_name=jTextField1.getText();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -482,10 +503,15 @@ public class Billing extends javax.swing.JFrame {
             ResultSet rs = pst.executeQuery();
             rs.next();
             in_id=rs.getInt(1);
-            System.out.println(""+in_id);
             
             s1.close();
-       
+            writer.println("Customer Name: "+cust_name);
+            writer.println("Invoice No: "+in_id);
+            writer.println("Date/Time: "+date);
+            writer.println("");
+            writer.println("Item                "+"Qty   "+"Amt");
+            writer.println("----------------------------------");
+            
             Vector v= model.getDataVector();
             for(int i=0;i<sr_no;i++)
             {
@@ -494,6 +520,13 @@ public class Billing extends javax.swing.JFrame {
                 qty=(Integer)c.elementAt(2);
                 amt=(Double)c.elementAt(3);
                 s1=null;
+                //***Writing to file*****************
+                 String Item=String.format("%-20s", item);
+                 String Qty=String.format("%-6s", ""+qty);
+       
+                 writer.println(Item+Qty+amt);
+                
+                //******************************************************************
                 try {
                     s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                      s1.executeUpdate("Update HAPPY.product set qty = qty-"+qty+" where pname ='"+item+"'");
@@ -508,13 +541,31 @@ public class Billing extends javax.swing.JFrame {
                     } catch (InstantiationException ex) {
                     Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);}
             }
+            String TT=String.format("%-26s","Total:");
+            writer.println("----------------------------------");
+            writer.println(TT+total);
+            writer.close();
+            generateBill();
        }
         catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
           };
-        
+    
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void generateBill()
+    {
+        //writing to file
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setPrintable(new Billing());
+        if (pj.printDialog()) {
+          try {
+            pj.print();
+          } catch (PrinterException e) {
+            System.out.println(e);}
+    }
+        
+    }
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
         new ViewTransaction().setVisible(true);
@@ -599,4 +650,29 @@ public class Billing extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public int print(Graphics g, PageFormat pf, int pageIndex) throws PrinterException {
+        int interline = 12;
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setFont(new Font("CourierThai", Font.PLAIN, 10));
+        int x =  (int) pf.getImageableX();
+        int y = (int) pf.getImageableY();
+
+        try {
+            FileReader fr = new FileReader("Bill.txt");
+            BufferedReader br = new BufferedReader(fr);
+
+            String s;
+            while ((s = br.readLine()) != null) {
+                y += interline;
+                System.out.println(s);
+                g2.drawString(s, x, y); 
+            }
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+         return PAGE_EXISTS;
+    }
 }

@@ -1,0 +1,12 @@
+Customer Name: Dabbu
+Invoice No: 1034
+Date/Time: 2017-03-12 21:28:45
+
+Item                Qty   Amt
+----------------------------------
+Kurkure             2     40.0
+Lays                2     40.0
+Tamatar             2     6.0
+tama tam            1     12.0
+----------------------------------
+Total:                    98.0
