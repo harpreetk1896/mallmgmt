@@ -16,7 +16,7 @@ public class Connect {
              try{
            
           Class.forName("org.apache.derby.jdbc.ClientDriver");
-         Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/mallmgm","rishab","rishab");
+         Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/mallmgmt","happy","happy");
           return con;
             
         }catch(ClassNotFoundException | SQLException e){
