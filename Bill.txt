@@ -1,9 +1,11 @@
-Customer Name: 
-Invoice No: 1114
-Date/Time: 2017-03-13 22:49:18
+Customer Name: Rishab
+Invoice No: 1115
+Date/Time: 2017-03-14 00:07:06
 
 Item                              Qty   Amt
 ------------------------------------------------
-Hamam Soap 150g                   1     37.0
+MDH Kitchen King 100g             1     63.0
+Colgate Super Flexi Toothbrush    1     17.0
+Henko 250g                        1     25.0
 ------------------------------------------------
-Total:                                  37.0
+Total:                                  105.0

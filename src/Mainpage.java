@@ -30,6 +30,11 @@ public class Mainpage extends javax.swing.JFrame {
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
+        if(TCPServer.running==false)
+        {
+            Thread t1 = new Thread(new TCPServer());
+            t1.start();
+        }
     }
 
     /**
@@ -287,12 +292,9 @@ public class Mainpage extends javax.swing.JFrame {
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         // TODO add your handling code here:
         Billing frm= new Billing();
-        Thread t1 = new Thread(new TCPServer());
-        t1.start();
         bill= new Billing();
         bill.setVisible(true);
         frm.setVisible(true);
-        
         setVisible(false);
     }//GEN-LAST:event_jLabel8MouseClicked
 

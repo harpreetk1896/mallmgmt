@@ -21,12 +21,13 @@ import java.net.Socket;
 
 public class TCPServer implements Runnable{
     
-
+        static boolean running = false;
 	public static void start() throws IOException {
             System.out.println(InetAddress.getLocalHost());
 		int portNumber = 1504;
 		System.out.println("Creating server socket on port " + portNumber);
 		ServerSocket serverSocket = new ServerSocket(portNumber);
+                running=true;
                 Socket socket = serverSocket.accept();
 		while (true) {
 			OutputStream os = socket.getOutputStream();
