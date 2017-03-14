@@ -40,8 +40,8 @@ public class ViewStock_Dist extends javax.swing.JFrame {
     PreparedStatement pst;
     static JTable table;
     private static String Distid=null,Pid=null,date=null;
-    private static int Qty=0,Price=0;
-    String[] columnNames = {"P_id","Dist_ID","Quantity","Price","Date"};
+    private static int Qty=0,Price=0,entry=0;
+    String[] columnNames = {"Entry","P_id","Dist_ID","Quantity","Price","Date"};
     
     
     public void showTableData() {
@@ -66,12 +66,13 @@ public class ViewStock_Dist extends javax.swing.JFrame {
             ResultSet rs = pst.executeQuery();
             int i = 0;
             while (rs.next()) {
+                entry=rs.getInt("entry");
                 Qty = rs.getInt("qty");
                 Price= rs.getInt("price");
                 Pid = rs.getString("pid");
                 Distid = rs.getString("distid");
                 date = rs.getString("date_of_delivery");
-                model.addRow(new Object[]{Pid,Distid,Qty,Price,date});
+                model.addRow(new Object[]{entry,Pid,Distid,Qty,Price,date});
                 //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
                 i++;
             }

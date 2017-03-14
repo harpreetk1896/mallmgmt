@@ -36,8 +36,8 @@ public class MainFrame extends javax.swing.JFrame {
     try {
         Connection con=Connect.ConnectDB();
         Statement statement = con.createStatement();
-        String sql= "CREATE TABLE happy.product (pid varchar(30) not null primary key generated always as identity "
-                + "(start with 50001,increment by 1),pname varchar(30) not null ,pinfo varchar(150) not null,qty integer default 0"
+        String sql= "CREATE TABLE happy.product (pid varchar(30) not null primary key,"
+                + "pname varchar(30) not null ,pinfo varchar(150) not null,qty integer default 0"
                 + ",s_price integer)";
         statement.executeUpdate(sql);
         System.out.println("Bill created");
@@ -55,7 +55,8 @@ public class MainFrame extends javax.swing.JFrame {
         statement.executeUpdate(sql);
         sql= "CREATE TABLE happy.bill (pname varchar(100),quantity integer,price integer)";
         statement.executeUpdate(sql);
-        sql= "CREATE TABLE happy.stock (pid integer,distid integer ,Qty integer not null, "
+        sql= "CREATE TABLE happy.stock (entry integer primary key generated always as identity (start with 1,increment by 1),"
+                + "pid varchar(30),distid integer ,Qty integer not null, "
                 + "Price integer not null,Date_of_delivery date,foreign key(distid) references happy.distributor(distid) on delete cascade,"
                 + "foreign key(pid) references happy.product(pid) on delete cascade)";
         statement.executeUpdate(sql);
