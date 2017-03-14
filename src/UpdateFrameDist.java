@@ -154,7 +154,7 @@ public class UpdateFrameDist extends javax.swing.JFrame {
             s1.close();
             conn.close();
           
-            JOptionPane.showMessageDialog(null, "Distributor Updated");
+            //JOptionPane.showMessageDialog(null, "Distributor Updated");
             setVisible(false);
            // result.last();
         }
