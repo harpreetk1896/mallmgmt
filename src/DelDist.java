@@ -414,14 +414,14 @@ public class DelDist extends javax.swing.JFrame {
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
           frm.setVisible(true);
-          setVisible(false);
-          Mainpage.dist.setVisible(false);
+          dispose();
+          Mainpage.dist.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         UpdateDist frm = new UpdateDist();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -433,14 +433,14 @@ public class DelDist extends javax.swing.JFrame {
             // TODO add your handling code here:
           AddDistributor frm = new AddDistributor();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         ViewDist frm = new ViewDist();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

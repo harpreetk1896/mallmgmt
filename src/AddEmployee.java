@@ -406,27 +406,27 @@ public class AddEmployee extends javax.swing.JFrame {
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
           frm.setVisible(true);
-          setVisible(false);
-          Mainpage.emp.setVisible(false);
+          dispose();
+          Mainpage.emp.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         UpdateEmp frm = new UpdateEmp();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
           new DelEmp().setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         ViewEmp frm = new ViewEmp();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped

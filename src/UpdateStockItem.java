@@ -384,14 +384,14 @@ public class UpdateStockItem extends javax.swing.JFrame {
         // TODO add your handling code here:
         AddStockItem frm = new AddStockItem();
         frm.setVisible(true);
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         ViewStockItem frm = new ViewStockItem();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
     
      private void handler()
@@ -407,11 +407,11 @@ public class UpdateStockItem extends javax.swing.JFrame {
         String pro_choosen = jComboBox1.getSelectedItem().toString();
         pid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
         Qty=jTextField2.getText();
-        System.out.println(pid+":"+Qty);
+        
          try{
             
             s1= con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            s1.executeUpdate("Update HAPPY.product set qty = "+Qty+" where pid = "+pid);
+            s1.executeUpdate("Update HAPPY.product set qty = "+Qty+" where pid = '"+pid+"'");
             
             s1.close();
             con.close();
@@ -426,6 +426,7 @@ public class UpdateStockItem extends javax.swing.JFrame {
           };
 //          jTextField1.setText("");
           jTextField2.setText("");
+          jComboBox1.setSelectedItem("");
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:        
@@ -436,8 +437,8 @@ public class UpdateStockItem extends javax.swing.JFrame {
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
         frm.setVisible(true);
-        setVisible(false);
-        Mainpage.stock.setVisible(false);
+        dispose();
+        Mainpage.stock.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -448,7 +449,7 @@ public class UpdateStockItem extends javax.swing.JFrame {
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         // TODO add your handling code here:
         new ViewStock_Dist().setVisible(true);
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed

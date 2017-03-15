@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import static java.awt.print.Printable.PAGE_EXISTS;
@@ -13,6 +14,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,9 +30,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -60,13 +60,29 @@ public class Billing extends javax.swing.JFrame implements Printable{
     DefaultTableModel model ;
     
     
-    
+    void tryAgain()
+    {
+        try {
+            String add = InetAddress.getLocalHost().toString();
+            add=add.substring(add.lastIndexOf("/")+1);
+            //Adding label text for mobile barcode instructions
+            if(add.substring(0,3).compareTo("127")==0)
+                jLabel10.setText("* To use mobile barcode, Please connect to same Wi-Fi network as phone (or use Hostpot)");
+            else
+                jLabel10.setText("* To use mobile barcode, enter Server address as "+add+" and port no. as 1504");
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public Billing() {
         initComponents();
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
+        tryAgain();
+        
+         jTextField1.requestFocus();
         model=new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
         
@@ -79,7 +95,6 @@ public class Billing extends javax.swing.JFrame implements Printable{
         } catch (SQLException ex) {
             Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
         }
-        jComboBox1.requestFocus();
         Connection con=Connect.ConnectDB();
         ResultSet rs=null;
         PreparedStatement pst=null;
@@ -93,7 +108,6 @@ public class Billing extends javax.swing.JFrame implements Printable{
         {
             pst=con.prepareStatement(sql);
             rs= pst.executeQuery();
-            System.out.println(rs);
 
             while (rs.next() ){
                 p_id=rs.getString(1);
@@ -129,8 +143,7 @@ public class Billing extends javax.swing.JFrame implements Printable{
         jTable1.setFillsViewportHeight(true);
 
         try {
-            
-            pst = conn.prepareStatement("select s_price from happy.product where pid="+itemid+"and qty>="+qty);
+            pst = conn.prepareStatement("select s_price from happy.product where pid='"+itemid+"'and qty>="+qty);
             ResultSet rs = pst.executeQuery();
             System.out.println(rs);
             rs.next();
@@ -143,7 +156,8 @@ public class Billing extends javax.swing.JFrame implements Printable{
            total+=amt;
            jLabel6.setText("Grand Total: "+total);
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(null,"Stock not available", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -175,6 +189,11 @@ public class Billing extends javax.swing.JFrame implements Printable{
         jTextField3 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
 
@@ -226,7 +245,6 @@ public class Billing extends javax.swing.JFrame implements Printable{
         jButton10.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jButton10.setForeground(new java.awt.Color(255, 255, 255));
         jButton10.setText("View Transactions");
-        jButton10.setBorder(null);
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
@@ -270,14 +288,26 @@ public class Billing extends javax.swing.JFrame implements Printable{
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton1.setText("Add");
+        jButton1.setNextFocusableComponent(jButton7);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField5KeyPressed(evt);
+            }
+        });
+
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton6.setText("Back");
+        jButton6.setText("Exit");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -305,6 +335,47 @@ public class Billing extends javax.swing.JFrame implements Printable{
         jLabel4.setText("Discount ( if any)");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField2FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField2FocusLost(evt);
+            }
+        });
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel7.setText("Product ID");
+
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel10.setText("jLabel10");
+        jLabel10.setToolTipText("");
+        jLabel10.setFocusable(false);
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/help.png"))); // NOI18N
+        jLabel11.setText("jLabel11");
+        jLabel11.setFocusable(false);
+
+        jButton2.setText("Try Again");
+        jButton2.setFocusable(false);
+        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -314,26 +385,12 @@ public class Billing extends javax.swing.JFrame implements Printable{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(52, 52, 52)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(91, 91, 91)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel3)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(67, 67, 67))))
+                        .addComponent(jLabel3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jLabel6)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 908, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jButton7)
                                     .addGap(71, 71, 71)
@@ -341,8 +398,35 @@ public class Billing extends javax.swing.JFrame implements Printable{
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel4)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel1))))
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel7))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel2))
+                                            .addGap(50, 50, 50)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(54, 54, 54)
+                                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jLabel5)))
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 908, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(30, 30, 30)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(118, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -355,16 +439,23 @@ public class Billing extends javax.swing.JFrame implements Printable{
                 .addGap(40, 40, 40)
                 .addComponent(jLabel3)
                 .addGap(37, 37, 37)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(41, 41, 41)
+                        .addComponent(jLabel10)
+                        .addComponent(jLabel11)))
+                .addGap(12, 12, 12)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
@@ -448,17 +539,30 @@ public class Billing extends javax.swing.JFrame implements Printable{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    void add_button()
+    {
+        qty=Integer.parseInt(jTextField5.getText());
+        if(qty<=0)
+        {
+            jTextField5.setText(null);
+            jTextField2.setText(null);
+            jComboBox1.setSelectedItem("");
+            jTextField2.requestFocus();
+            return;
+        }
         String pro_choosen = jComboBox1.getSelectedItem().toString();
         itemid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
         item = pro_choosen.substring(0,pro_choosen.lastIndexOf("~") - 1);
-        qty=Integer.parseInt(jTextField5.getText());
         
         showTable();
        
         jTextField5.setText(null);
-        
+        jTextField2.setText(null);
+        jComboBox1.setSelectedItem("");
+        jTextField2.requestFocus();
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        add_button();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -468,16 +572,14 @@ public class Billing extends javax.swing.JFrame implements Printable{
         } catch (SQLException ex) {
             Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Mainpage frm = new Mainpage();
-          frm.setVisible(true);
-          setVisible(false);
-          Mainpage.bill.setVisible(false);
+       MainFrame.bill.dispose();
+       dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
     
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-          new ViewBill().setVisible(true);
-          setVisible(false);
+          new ViewBill_Biller().setVisible(true);
+          dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -509,8 +611,8 @@ public class Billing extends javax.swing.JFrame implements Printable{
             writer.println("Invoice No: "+in_id);
             writer.println("Date/Time: "+date);
             writer.println("");
-            writer.println("Item                "+"Qty   "+"Amt");
-            writer.println("----------------------------------");
+            writer.println("Item                              "+"Qty   "+"Amt");
+            writer.println("------------------------------------------------");
             
             Vector v= model.getDataVector();
             for(int i=0;i<sr_no;i++)
@@ -521,7 +623,7 @@ public class Billing extends javax.swing.JFrame implements Printable{
                 amt=(Double)c.elementAt(3);
                 s1=null;
                 //***Writing to file*****************
-                 String Item=String.format("%-20s", item);
+                 String Item=String.format("%-34s", item);
                  String Qty=String.format("%-6s", ""+qty);
        
                  writer.println(Item+Qty+amt);
@@ -529,7 +631,7 @@ public class Billing extends javax.swing.JFrame implements Printable{
                 //******************************************************************
                 try {
                     s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                     s1.executeUpdate("Update HAPPY.product set qty = qty-"+qty+" where pname ='"+item+"'");
+                     s1.executeUpdate("Update HAPPY.product set qty = qty-"+qty+" where pid ='"+itemid+"'");
 
                 } catch (SQLException ex) {
                     Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);};
@@ -541,13 +643,14 @@ public class Billing extends javax.swing.JFrame implements Printable{
                     } catch (InstantiationException ex) {
                     Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);}
             }
-            String TT=String.format("%-26s","Total:");
-            writer.println("----------------------------------");
+            String TT=String.format("%-40s","Total:");
+            writer.println("------------------------------------------------");
             writer.println(TT+total);
             writer.close();
             generateBill();
        }
         catch(SQLException ex){
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
           };
     
@@ -558,19 +661,83 @@ public class Billing extends javax.swing.JFrame implements Printable{
         //writing to file
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setPrintable(new Billing());
-        if (pj.printDialog()) {
-          try {
+        
+        try {
+        ProcessBuilder pb = new ProcessBuilder("Notepad.exe", "Bill.txt");
+            pb.start();
+             } catch (IOException ex) {
+            Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        /*
+            if (pj.printDialog()) {
+            try {
             pj.print();
-          } catch (PrinterException e) {
+            
+            } catch (PrinterException e) {
             System.out.println(e);}
-    }
+            
+        }*/
         
     }
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
-        new ViewTransaction().setVisible(true);
-        setVisible(false);
+        new ViewTransaction_Biller().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jTextField2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusGained
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                while(jTextField2.isFocusOwner()) 
+                {
+                    if(BarcodeInput.has_input)
+                    {
+                        jTextField2.setText(BarcodeInput.getInput());
+                        jTextField5.requestFocus();
+                        Thread.currentThread().stop();
+                    }
+                }               
+            }
+        }).start();
+    }//GEN-LAST:event_jTextField2FocusGained
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
+       itemid = jTextField2.getText();
+        try {
+        pst=conn.prepareStatement("select pname from happy.product where pid='"+itemid+"'");
+            rs1= pst.executeQuery();
+            if (rs1.next() ){
+                item = rs1.getString(1);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
+        }
+        jComboBox1.setSelectedItem(item+" ~ "+itemid);
+    }//GEN-LAST:event_jTextField2FocusLost
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jTextField5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyPressed
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER){
+            add_button();
+        }
+    }//GEN-LAST:event_jTextField5KeyPressed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        tryAgain();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void InsertIntoTable() throws SQLException, InstantiationException {
         try{
@@ -584,7 +751,7 @@ public class Billing extends javax.swing.JFrame implements Printable{
         }
     catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
-          };
+          }
     }
     /**
      * @param args the command line arguments
@@ -626,17 +793,21 @@ public class Billing extends javax.swing.JFrame implements Printable{
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -647,10 +818,12 @@ public class Billing extends javax.swing.JFrame implements Printable{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
 
+    
     @Override
     public int print(Graphics g, PageFormat pf, int pageIndex) throws PrinterException {
         int interline = 12;
@@ -674,5 +847,5 @@ public class Billing extends javax.swing.JFrame implements Printable{
             System.out.println(e);
         }
          return PAGE_EXISTS;
-    }
+    } 
 }

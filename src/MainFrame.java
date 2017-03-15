@@ -36,9 +36,11 @@ public class MainFrame extends javax.swing.JFrame {
     try {
         Connection con=Connect.ConnectDB();
         Statement statement = con.createStatement();
-        String sql= "CREATE TABLE happy.bill (pname varchar(100),quantity integer,price integer)";
+        String sql= "CREATE TABLE happy.product (pid varchar(30) not null primary key,"
+                + "pname varchar(30) not null ,pinfo varchar(150) not null,qty integer default 0"
+                + ",s_price integer)";
         statement.executeUpdate(sql);
-        System.out.println("BIll created");
+        System.out.println("Bill created");
         sql= "CREATE TABLE happy.invoice (invoiceid integer not null primary key generated always as identity "
                 + "(start with 1001,increment by 1),cust_name varchar(40),startrow integer, endrow integer,"
                 + "date_time timestamp,total integer)";
@@ -51,11 +53,10 @@ public class MainFrame extends javax.swing.JFrame {
         sql= "CREATE TABLE happy.distributor (distid integer not null primary key generated always as identity "
                 + "(start with 30001,increment by 1),dname varchar(30) not null,dcontact_no varchar(13) not null,daddress varchar (150))";
         statement.executeUpdate(sql);
-        sql= "CREATE TABLE happy.product (pid integer not null primary key generated always as identity "
-                + "(start with 50001,increment by 1),pname varchar(30) not null ,pinfo varchar(150) not null,qty integer default 0"
-                + ",s_price integer)";
+        sql= "CREATE TABLE happy.bill (pname varchar(100),quantity integer,price integer)";
         statement.executeUpdate(sql);
-        sql= "CREATE TABLE happy.stock (pid integer,distid integer ,Qty integer not null, "
+        sql= "CREATE TABLE happy.stock (entry integer primary key generated always as identity (start with 1,increment by 1),"
+                + "pid varchar(30),distid integer ,Qty integer not null, "
                 + "Price integer not null,Date_of_delivery date,foreign key(distid) references happy.distributor(distid) on delete cascade,"
                 + "foreign key(pid) references happy.product(pid) on delete cascade)";
         statement.executeUpdate(sql);
@@ -76,7 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
-        System.out.println(x+" "+y);
+        
         this.setSize(x,y);
     }
     
@@ -94,6 +95,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -150,6 +152,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(153, 204, 255));
+        jButton2.setText("Change Password");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -166,7 +176,8 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(192, 192, 192)
+                        .addComponent(jButton2)
+                        .addGap(119, 119, 119)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(57, Short.MAX_VALUE))
         );
@@ -182,8 +193,11 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16))
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -233,13 +247,25 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
+    public static Billing bill;
     
     private void handler() {    
-           con=Connect.ConnectDB();
-         char[] pass=  jPasswordField1.getPassword(); 
-         String pass1 = new String(pass);
-      String sql= "select * from happy.users where Username= '" + jTextField1.getText() + "'"
+         if (jTextField1.getText().equals("")) {
+           JOptionPane.showMessageDialog( this, "Please enter user name","Error", JOptionPane.ERROR_MESSAGE);
+           return;
+            
+            }
+        String Password= String.valueOf(jPasswordField1.getPassword());
+        if (Password.equals("")) {
+           JOptionPane.showMessageDialog( this, "Please enter password","Error", JOptionPane.ERROR_MESSAGE);
+           return;
+           }
+        
+        con=Connect.ConnectDB();
+        char[] pass=  jPasswordField1.getPassword(); 
+        String pass1 = new String(pass);
+        String username=jTextField1.getText();
+        String sql= "select * from happy.users where Username= '" + username + "'"
               + " and Password ='" + pass1 + "'";
       //System.out.println(sql);
       try
@@ -248,11 +274,25 @@ public class MainFrame extends javax.swing.JFrame {
           rs= pst.executeQuery();
           
           if (rs.next() ){
-             //this.hide();
-             //System.out.println("happu");
-             Mainpage frm=new Mainpage();
-             frm.setVisible(true);
-             setVisible(false);
+             
+             if(username.equals("admin")) 
+                new Mainpage().setVisible(true);
+            
+             else
+             {
+                 if(TCPServer.running==false)
+                    {
+                        Thread t1 = new Thread(new TCPServer());
+                        t1.start();
+                    }
+                   bill= new Billing();
+                   bill.setVisible(true);
+                   new Billing().setVisible(true);
+             }
+               
+             
+             dispose();
+             
           }
           else{
               
@@ -268,16 +308,6 @@ public class MainFrame extends javax.swing.JFrame {
                                        
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if (jTextField1.getText().equals("")) {
-           JOptionPane.showMessageDialog( this, "Please enter user name","Error", JOptionPane.ERROR_MESSAGE);
-           return;
-            
-            }
-    String Password= String.valueOf(jPasswordField1.getPassword());
-        if (Password.equals("")) {
-           JOptionPane.showMessageDialog( this, "Please enter password","Error", JOptionPane.ERROR_MESSAGE);
-           return;
-           }
               handler();           
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -295,6 +325,10 @@ public class MainFrame extends javax.swing.JFrame {
            handler();
      }
     }//GEN-LAST:event_jPasswordField1KeyPressed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new ChangePassword().setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -331,6 +365,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

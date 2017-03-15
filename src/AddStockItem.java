@@ -1,5 +1,6 @@
 
 import com.sun.glass.events.KeyEvent;
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -487,9 +488,11 @@ public class AddStockItem extends javax.swing.JFrame {
         Distid = dist_choosen.substring(dist_choosen.lastIndexOf("~") + 2);
         Date=jTextField6.getText();
         
-        System.out.println();
         try {
            InsertIntoTable();
+           jLabel2.setForeground(Color.blue);
+           jLabel2.setText("Stock Item Added");
+           
        } catch (SQLException ex) {
            System.out.println(ex.getMessage());
        } catch (InstantiationException ex) {
@@ -498,25 +501,27 @@ public class AddStockItem extends javax.swing.JFrame {
         jTextField2.setText(null);
         jTextField4.setText(null);
         jTextField6.setText(null);
+        jComboBox1.setSelectedItem("");
+        jComboBox2.setSelectedItem("");
      }
      
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
           frm.setVisible(true);
-          setVisible(false);
-          Mainpage.stock.setVisible(false);
+          dispose();
+          Mainpage.stock.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         new UpdateStockItem().setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
        new ViewStockItem().setVisible(true);
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -531,13 +536,13 @@ public class AddStockItem extends javax.swing.JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-       jLabel2.setText("");
+       //jLabel2.setText("");
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         // TODO add your handling code here:
         new ViewStock_Dist().setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -560,16 +565,14 @@ public class AddStockItem extends javax.swing.JFrame {
             Connection conn = Connect.ConnectDB();
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            System.out.println("Done");
-            s1.executeUpdate("INSERT INTO HAPPY.Stock VALUES ("+Pid+","+Distid+","+Qty+","+Price+",'"+Date+"')");
-            System.out.println("Done");
+            
+            s1.executeUpdate("INSERT INTO HAPPY.Stock (pid,distid,qty,price,date_of_delivery) VALUES ('"+Pid+"',"+Distid+","+Qty+","+Price+",'"+Date+"')");
+            //System.out.println("Done");
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            s1.executeUpdate("Update HAPPY.product set qty = qty+"+Qty+" where pid = "+Pid);
+            s1.executeUpdate("Update HAPPY.product set qty = qty+"+Qty+" where pid = '"+Pid+"'");
             
             s1.close();
             conn.close();
-            jLabel2.setText( "Stock Item Added");
-            
            // result.last();
         }
     catch(SQLException ex){

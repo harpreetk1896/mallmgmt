@@ -349,21 +349,21 @@ public class UpdatePro extends javax.swing.JFrame {
         // TODO add your handling code here:
           DelPro frm = new DelPro();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         AddProduct frm = new AddProduct();
         frm.setVisible(true);
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         ViewPro frm = new ViewPro();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void handler()
@@ -377,7 +377,7 @@ public class UpdatePro extends javax.swing.JFrame {
         String pro_choosen = jComboBox1.getSelectedItem().toString();
         pid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
         //pid=jTextField1.getText();
-        String sql= "select * from happy.product where pid = " + pid;
+        String sql= "select * from happy.product where pid = '" + pid+"'";
         
         try
         {
@@ -389,8 +389,7 @@ public class UpdatePro extends javax.swing.JFrame {
                 Info=rs.getString(3);
                 Price=rs.getString(5);
                 UpdateFramePro frm = new UpdateFramePro(pid,Name,Info,Price);
-                
-                //frm.setVisible(true);
+                jComboBox1.setSelectedItem("");
             }
             else{
 
@@ -414,8 +413,8 @@ public class UpdatePro extends javax.swing.JFrame {
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
         frm.setVisible(true);
-        setVisible(false);
-        Mainpage.pro.setVisible(false);
+        dispose();
+        Mainpage.pro.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

@@ -347,21 +347,21 @@ public class UpdateDist extends javax.swing.JFrame {
         // TODO add your handling code here:
           DelDist frm = new DelDist();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         AddDistributor frm = new AddDistributor();
         frm.setVisible(true);
-        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         ViewDist frm = new ViewDist();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
      private void handler()
@@ -387,6 +387,7 @@ public class UpdateDist extends javax.swing.JFrame {
                 No=rs.getString(3);
                 
                 UpdateFrameDist frm = new UpdateFrameDist(distid,Name,Add,No);
+                jComboBox1.setSelectedItem("");
                 //frm.setVisible(true);
             }
             else{
@@ -411,8 +412,8 @@ public class UpdateDist extends javax.swing.JFrame {
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
         frm.setVisible(true);
-        setVisible(false);
-        Mainpage.dist.setVisible(false);
+        dispose();
+        Mainpage.dist.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

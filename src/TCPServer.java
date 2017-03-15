@@ -21,12 +21,13 @@ import java.net.Socket;
 
 public class TCPServer implements Runnable{
     
-
+        static boolean running = false;
 	public static void start() throws IOException {
             System.out.println(InetAddress.getLocalHost());
-		int portNumber = 91;
+		int portNumber = 1504;
 		System.out.println("Creating server socket on port " + portNumber);
 		ServerSocket serverSocket = new ServerSocket(portNumber);
+                running=true;
                 Socket socket = serverSocket.accept();
 		while (true) {
 			OutputStream os = socket.getOutputStream();
@@ -35,6 +36,10 @@ public class TCPServer implements Runnable{
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String str = br.readLine();
+                        System.out.println(str);
+                        if(str.contains("!"))
+                        BarcodeInput.setInput(str.substring(str.lastIndexOf("!")+1));
+                        else
                         BarcodeInput.setInput(str);
                         System.out.println(BarcodeInput.getInput());
 		}

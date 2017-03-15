@@ -309,28 +309,28 @@ public class ViewPro extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         UpdatePro frm = new UpdatePro();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
         new DelPro().setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
         frm.setVisible(true);
-        setVisible(false);
-        Mainpage.pro.setVisible(false);
+        dispose();
+        Mainpage.pro.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         AddProduct frm = new AddProduct();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -340,12 +340,12 @@ public class ViewPro extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String search_text = jTextField1.getText();
         if (search_text.matches("[0-9]+") && search_text.length() > 1)
-        sql_query = "select * from happy.product where pid = "+search_text
+        sql_query = "select * from happy.product where pid like "+"'%"+search_text+"%'"
                 +" or pname like "+"'%"+search_text+"%'"+" or pinfo like "+"'%"+search_text+"%'"+
                 " or qty = "+search_text+" or s_price = "+search_text;
         else
         sql_query = "select * from happy.product where pname like "+"'%"+search_text+"%'"+""
-                + " or pinfo like "+"'%"+search_text+"%'";
+                + " or pinfo like "+"'%"+search_text+"%'" + " or pid like "+"'%"+search_text+"%'";
         DisplayProData dst=new DisplayProData(model,sql_query);
         jTextField1.requestFocus();
     }//GEN-LAST:event_jButton1ActionPerformed

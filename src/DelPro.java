@@ -358,7 +358,7 @@ public class DelPro extends javax.swing.JFrame {
         PreparedStatement pst=null;
         String pro_choosen = jComboBox1.getSelectedItem().toString();
         pid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
-        String sql= "select * from happy.product where pid = " + pid + "";
+        String sql= "select * from happy.product where pid = '" + pid + "'";
       //System.out.println(sql);
       try
       {
@@ -369,9 +369,8 @@ public class DelPro extends javax.swing.JFrame {
              //this.hide();
              //System.out.println("happu");
              
-             String str= " DELETE FROM happy.product WHERE pid = ?"; 
+             String str= " DELETE FROM happy.product WHERE pid = '"+pid+"'"; 
              PreparedStatement st = con.prepareStatement(str);
-             st.setString(1,pid);
              st.executeUpdate(); 
              JOptionPane.showMessageDialog(null, "Product Deleted");
           }
@@ -398,14 +397,14 @@ public class DelPro extends javax.swing.JFrame {
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
           frm.setVisible(true);
-          setVisible(false);
-          Mainpage.pro.setVisible(false);
+          dispose();
+          Mainpage.pro.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         UpdatePro frm = new UpdatePro();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -417,14 +416,14 @@ public class DelPro extends javax.swing.JFrame {
             // TODO add your handling code here:
           AddProduct frm = new AddProduct();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         ViewPro frm = new ViewPro();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

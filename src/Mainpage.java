@@ -22,7 +22,7 @@ public class Mainpage extends javax.swing.JFrame {
     public static AddDistributor dist;
     public static AddProduct pro;
     public static AddStockItem stock;
-    public static Billing bill;
+    public static ViewTransaction bill;
     
     public Mainpage() {
         initComponents();
@@ -30,6 +30,12 @@ public class Mainpage extends javax.swing.JFrame {
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
+        
+        if(TCPServer.running==false)
+        {
+            Thread t1 = new Thread(new TCPServer());
+            t1.start();
+        }
     }
 
     /**
@@ -224,79 +230,58 @@ public class Mainpage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        // TODO add your handling code here:
-        AddEmployee frm= new AddEmployee();
-        
+       
         emp= new AddEmployee();
         emp.setVisible(true);
-        frm.setVisible(true);
-        
-        setVisible(false);
+        new AddEmployee().setVisible(true);
+        dispose();
         
     }//GEN-LAST:event_jLabel11MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        // TODO add your handling code here:
-        AddEmployee frm= new AddEmployee();
-        
         emp= new AddEmployee();
         emp.setVisible(true);
-        frm.setVisible(true);
-        
-        setVisible(false);
+        new AddEmployee().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        // TODO add your handling code here:
-        AddDistributor frm= new AddDistributor();
-        
+       
         dist= new AddDistributor();
         dist.setVisible(true);
-        frm.setVisible(true);
-        
-        setVisible(false);
+         new AddDistributor().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        // TODO add your handling code here:
-        AddDistributor frm= new AddDistributor();
-        
         dist= new AddDistributor();
         dist.setVisible(true);
-        frm.setVisible(true);
-        
-        setVisible(false);
+         new AddDistributor().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-        AddProduct frm= new AddProduct();
-        
+     
         pro= new AddProduct();
         pro.setVisible(true);
-        frm.setVisible(true);
-        
-        setVisible(false);
+        new AddProduct().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        AddStockItem frm= new AddStockItem();
-        
+
         stock= new AddStockItem();
         stock.setVisible(true);
-        frm.setVisible(true);
-        
-        setVisible(false);
+        new AddStockItem().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
-        // TODO add your handling code here:
-        Billing frm= new Billing();
-        
-        bill= new Billing();
+
+        bill= new ViewTransaction();
         bill.setVisible(true);
-        frm.setVisible(true);
-        
-        setVisible(false);
+        new ViewTransaction().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
 
     /**

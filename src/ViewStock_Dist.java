@@ -40,8 +40,8 @@ public class ViewStock_Dist extends javax.swing.JFrame {
     PreparedStatement pst;
     static JTable table;
     private static String Distid=null,Pid=null,date=null;
-    private static int Qty=0,Price=0;
-    String[] columnNames = {"P_id","Dist_ID","Quantity","Price","Date"};
+    private static int Qty=0,Price=0,entry=0;
+    String[] columnNames = {"Entry","P_id","Dist_ID","Quantity","Price","Date"};
     
     
     public void showTableData() {
@@ -66,12 +66,13 @@ public class ViewStock_Dist extends javax.swing.JFrame {
             ResultSet rs = pst.executeQuery();
             int i = 0;
             while (rs.next()) {
+                entry=rs.getInt("entry");
                 Qty = rs.getInt("qty");
                 Price= rs.getInt("price");
                 Pid = rs.getString("pid");
                 Distid = rs.getString("distid");
                 date = rs.getString("date_of_delivery");
-                model.addRow(new Object[]{Pid,Distid,Qty,Price,date});
+                model.addRow(new Object[]{entry,Pid,Distid,Qty,Price,date});
                 //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
                 i++;
             }
@@ -324,28 +325,28 @@ public class ViewStock_Dist extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         UpdateStockItem frm = new UpdateStockItem();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
         frm.setVisible(true);
-        setVisible(false);
-        Mainpage.stock.setVisible(false);
+        dispose();
+        Mainpage.stock.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         AddStockItem frm = new AddStockItem();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         new ViewStockItem().setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     
