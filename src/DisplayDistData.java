@@ -22,7 +22,7 @@ public class DisplayDistData extends JFrame  {
     Statement  st1;
     PreparedStatement pst;
     static JTable table;
-    private static String Name=null,Add=null,No=null,distid=null;
+    private static String Name=null,Add=null,No=null,distid=null,sql=null;
     String[] columnNames = {"Distid","Name","Contact_No","Address"};
    
     DefaultTableModel model ;
@@ -33,6 +33,7 @@ public class DisplayDistData extends JFrame  {
         setLocation(390,160);
         setSize(650,400);
         model = new DefaultTableModel();
+        sql="select * from happy.distributor";
         showTable();
         setVisible(true);
        
@@ -40,9 +41,14 @@ public class DisplayDistData extends JFrame  {
 
     DisplayDistData(DefaultTableModel m) {
         model=m;
+        sql="select * from happy.distributor";
         showTable();
        }
-    //public void showTableData(DefaultTableModel m){model=m;showTable();}
+    DisplayDistData(DefaultTableModel m, String s) {
+        model=m;
+        sql = s;
+        showTable();
+    }
     
     public void showTable() {
         model.setColumnIdentifiers(columnNames);
@@ -60,7 +66,7 @@ public class DisplayDistData extends JFrame  {
 
         try {
             conn = Connect.ConnectDB();
-            pst = conn.prepareStatement("select * from happy.distributor");
+            pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             int i = 0;
             while (rs.next()) {

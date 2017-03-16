@@ -1,5 +1,6 @@
 
 
+import com.sun.glass.events.KeyEvent;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,7 +37,7 @@ public class ViewPro extends javax.swing.JFrame {
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
         DisplayProData dst=new DisplayProData(model,"select * from happy.product");
-        jTextField1.requestFocus();
+        jTextField.requestFocus();
     }
 
     @SuppressWarnings("unchecked")
@@ -57,9 +58,7 @@ public class ViewPro extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        jTextField = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
 
@@ -173,23 +172,9 @@ public class ViewPro extends javax.swing.JFrame {
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(jTable1);
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-
-        jButton1.setText("Search");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton7.setText("Show All");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+        jTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldKeyReleased(evt);
             }
         });
 
@@ -206,12 +191,7 @@ public class ViewPro extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton7))
+                    .addComponent(jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 78, Short.MAX_VALUE))
         );
@@ -223,13 +203,10 @@ public class ViewPro extends javax.swing.JFrame {
                         .addGap(115, 115, 115)
                         .addComponent(jLabel3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton7))
+                        .addGap(40, 40, 40)
+                        .addComponent(jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(28, 28, 28)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(56, Short.MAX_VALUE))
@@ -333,12 +310,9 @@ public class ViewPro extends javax.swing.JFrame {
           dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String search_text = jTextField1.getText();
+    private void jTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldKeyReleased
+        String search_text = jTextField.getText();
+        
         if (search_text.matches("[0-9]+") && search_text.length() > 1)
         sql_query = "select * from happy.product where pid like "+"'%"+search_text+"%'"
                 +" or pname like "+"'%"+search_text+"%'"+" or pinfo like "+"'%"+search_text+"%'"+
@@ -347,13 +321,8 @@ public class ViewPro extends javax.swing.JFrame {
         sql_query = "select * from happy.product where pname like "+"'%"+search_text+"%'"+""
                 + " or pinfo like "+"'%"+search_text+"%'" + " or pid like "+"'%"+search_text+"%'";
         DisplayProData dst=new DisplayProData(model,sql_query);
-        jTextField1.requestFocus();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        DisplayProData dst=new DisplayProData(model,"select * from happy.product");
-        jTextField1.requestFocus();
-    }//GEN-LAST:event_jButton7ActionPerformed
+        jTextField.requestFocus();
+    }//GEN-LAST:event_jTextFieldKeyReleased
 
     
     /**
@@ -392,13 +361,11 @@ public class ViewPro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -409,6 +376,6 @@ public class ViewPro extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField;
     // End of variables declaration//GEN-END:variables
 }

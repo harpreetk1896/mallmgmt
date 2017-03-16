@@ -33,7 +33,7 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
     Connection conn;
     PreparedStatement ps;
     ResultSet rs;
-    String invoiceid=null,datetime=null,cust_name=null,amt=null;
+    String invoiceid=null,datetime=null,cust_name=null,amt=null,sql=null;
     String[] columnNames = {"Invoice_id","Cust_Name","Date/Time","Amount Paid"};
     DefaultTableModel model;
     
@@ -45,7 +45,9 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
         int y= (int) tk.getScreenSize().getHeight();
         model.setColumnIdentifiers(columnNames);
         jTable1.setModel(model);
+        jTextField1.requestFocus();
         try {
+            sql="Select * from happy.invoice";
             viewBill();
         } catch (SQLException ex) {
             Logger.getLogger(ViewTransaction_Biller.class.getName()).log(Level.SEVERE, null, ex);
@@ -54,12 +56,10 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
     
     void viewBill() throws SQLException
     {
-        
+        jLabel1.setText("");
         jTable1.setFillsViewportHeight(true);
-        
-        
+      
         conn=Connect.ConnectDB();
-        String sql="Select * from happy.invoice";
         ps=conn.prepareStatement(sql);
         rs=ps.executeQuery();
         int i = 0;
@@ -74,7 +74,7 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
                 i++;
             }
             if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+                jLabel1.setText("No Record Found");
             }
             
         conn.close();
@@ -97,6 +97,8 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
 
@@ -195,20 +197,31 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(jTable1);
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jLabel3)
-                .addGap(34, 34, 34)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(73, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(471, 471, 471))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jLabel3)
+                .addGap(34, 34, 34)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(68, 68, 68)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,8 +230,12 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(54, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
@@ -312,6 +329,23 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        String search_text = jTextField1.getText();
+        
+        if (search_text.matches("[0-9]+") && search_text.length() > 1)
+        sql = "select * from happy.invoice where cust_name like "+"'%"+search_text+"%'"
+                +" or invoiceid = "+search_text+" or total = "+search_text;
+        else
+        sql = "select * from happy.invoice where cust_name like "+"'%"+search_text+"%'" ;
+        model.setRowCount(0);
+        try {
+            viewBill();
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewTransaction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTextField1.requestFocus();
+    }//GEN-LAST:event_jTextField1KeyReleased
+
     
     /**
      * @param args the command line arguments
@@ -353,6 +387,7 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton9;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -363,5 +398,6 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

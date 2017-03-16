@@ -6,11 +6,18 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.jdatepicker.JDateComponentFactory;
+import org.jdatepicker.JDatePicker;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,8 +34,20 @@ public class AddEmployee extends javax.swing.JFrame {
     /**
      * Creates new form AddEmployee
      */
+        private javax.swing.JPanel Date_jPanel;
+        JDatePicker date_picker;
     public AddEmployee() {
         initComponents();
+        //Adding datepicker*********************************************
+        JDateComponentFactory j= new JDateComponentFactory();
+        date_picker = j.createJDatePicker();
+        date_picker.setShowYearButtons(true);
+        date_picker.getModel();
+        Date_jPanel = new javax.swing.JPanel();
+        Date_jPanel.setSize(210,35);Date_jPanel.setLocation(320, 270);
+        jPanel1.add(Date_jPanel);
+        Date_jPanel.add((JComponent)date_picker);
+        //**************************************************************
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
@@ -66,7 +85,6 @@ public class AddEmployee extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -194,12 +212,6 @@ public class AddEmployee extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("Date of Joining");
 
-        jTextField7.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField7KeyPressed(evt);
-            }
-        });
-
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton6.setText("Back");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -234,15 +246,14 @@ public class AddEmployee extends javax.swing.JFrame {
                                     .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
                                     .addComponent(jTextField2)
                                     .addComponent(jTextField5)
-                                    .addComponent(jTextField4)
-                                    .addComponent(jTextField7)))
+                                    .addComponent(jTextField4)))
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(215, 215, 215)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(93, 93, 93)
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(491, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,11 +279,9 @@ public class AddEmployee extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(jLabel3)))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -294,7 +303,7 @@ public class AddEmployee extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(jLabel9)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(870, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,9 +318,9 @@ public class AddEmployee extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1093, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1093, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 45, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -371,18 +380,20 @@ public class AddEmployee extends javax.swing.JFrame {
            jLabel6.setText( "Enter Contact No");
            return;  }
            
-           if (jTextField7.getText().equals("")) {
-           jLabel6.setText( "Enter Date of joining");
-           return;  }
-           
-           
+
+        //Getting Date************************************
+        GregorianCalendar newGregCal = new GregorianCalendar();
+        newGregCal=(GregorianCalendar) date_picker.getModel().getValue();
+        
+        Date selectedDate = (Date) newGregCal.getTime();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Doj = df.format(selectedDate);
+        //************************************************************   
         Name=jTextField1.getText();
         Desig=jTextField2.getText();
         Add=jTextField5.getText();
         No=jTextField4.getText();
-        Doj=jTextField7.getText();
         
-        System.out.println();
         try {
            InsertIntoTable();
        } catch (SQLException ex) {
@@ -394,7 +405,7 @@ public class AddEmployee extends javax.swing.JFrame {
         jTextField2.setText(null);
         jTextField4.setText(null);
         jTextField5.setText(null);
-        jTextField7.setText(null);
+
      }
      
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -433,12 +444,6 @@ public class AddEmployee extends javax.swing.JFrame {
         // TODO add your handling code here:
         jLabel6.setText("");
     }//GEN-LAST:event_jTextField1KeyTyped
-
-    private void jTextField7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyPressed
-       
-        if(evt.getKeyCode()== KeyEvent.VK_ENTER)
-            handler();
-    }//GEN-LAST:event_jTextField7KeyPressed
 
     private void InsertIntoTable() throws SQLException, InstantiationException {
         try{
@@ -520,7 +525,6 @@ public class AddEmployee extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField7;
     // End of variables declaration//GEN-END:variables
 
    

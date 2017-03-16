@@ -9,13 +9,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.jdatepicker.JDateComponentFactory;
+import org.jdatepicker.JDatePicker;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,8 +39,20 @@ public class AddStockItem extends javax.swing.JFrame {
     /**
      * Creates new form AddEmployee
      */
+        private javax.swing.JPanel Date_jPanel;
+        JDatePicker date_picker;
     public AddStockItem() {
         initComponents();
+        //Adding datepicker*********************************************
+        JDateComponentFactory j= new JDateComponentFactory();
+        date_picker = j.createJDatePicker();
+        date_picker.setShowYearButtons(true);
+        date_picker.getModel();
+        Date_jPanel = new javax.swing.JPanel();
+        Date_jPanel.setSize(210,35);Date_jPanel.setLocation(354, 270);
+        jPanel1.add(Date_jPanel);
+        Date_jPanel.add((JComponent)date_picker);
+        //**************************************************************
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
@@ -134,7 +153,6 @@ public class AddStockItem extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
@@ -283,12 +301,6 @@ public class AddStockItem extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("Date");
 
-        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField6KeyPressed(evt);
-            }
-        });
-
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -330,8 +342,7 @@ public class AddStockItem extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-                                        .addComponent(jTextField4)
-                                        .addComponent(jTextField6))
+                                        .addComponent(jTextField4))
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, 285, Short.MAX_VALUE)))
@@ -373,11 +384,9 @@ public class AddStockItem extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
+                .addGap(32, 32, 32)
+                .addComponent(jLabel7)
+                .addGap(67, 67, 67)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -476,9 +485,14 @@ public class AddStockItem extends javax.swing.JFrame {
            jLabel2.setText( "Enter Price");
            return;  }
         
-        if (jTextField6.getText().equals("")) {
-           jLabel2.setText( "Enter Date");
-           return;  }
+       //Getting Date************************************
+        GregorianCalendar newGregCal = new GregorianCalendar();
+        newGregCal=(GregorianCalendar) date_picker.getModel().getValue();
+        
+        Date selectedDate = (Date) newGregCal.getTime();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date = df.format(selectedDate);
+        //************************************************************   
         
         Qty=jTextField2.getText();
         Price=jTextField4.getText();
@@ -486,7 +500,6 @@ public class AddStockItem extends javax.swing.JFrame {
         Pid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
         String dist_choosen = jComboBox2.getSelectedItem().toString();
         Distid = dist_choosen.substring(dist_choosen.lastIndexOf("~") + 2);
-        Date=jTextField6.getText();
         
         try {
            InsertIntoTable();
@@ -500,7 +513,6 @@ public class AddStockItem extends javax.swing.JFrame {
         }
         jTextField2.setText(null);
         jTextField4.setText(null);
-        jTextField6.setText(null);
         jComboBox1.setSelectedItem("");
         jComboBox2.setSelectedItem("");
      }
@@ -549,12 +561,6 @@ public class AddStockItem extends javax.swing.JFrame {
         // TODO add your handling code here:
         handler();
     }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void jTextField6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyPressed
-        // TODO add your handling code here:
-        if(evt.getKeyCode()== KeyEvent.VK_ENTER)
-            handler();
-    }//GEN-LAST:event_jTextField6KeyPressed
 
     private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed
 
@@ -642,6 +648,5 @@ public class AddStockItem extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 }
