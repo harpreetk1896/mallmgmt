@@ -79,14 +79,7 @@ public class DisplayDistData extends JFrame  {
                 //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
                 i++;
             }
-            if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (i == 1) {
-                //System.out.println(i + " Record Found");
-            } else {
-                //System.out.println(i + " Records Found");
-            }
+           
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -311,9 +311,9 @@ public class ViewEmp extends javax.swing.JFrame {
         String search_text = jTextField.getText();
         String sql_query=null;
 
-        if (search_text.matches("[0-9]+") && search_text.length() > 1)
-        sql_query = "select * from happy.employee where date_of_joining like "+"'%"+search_text+"%'"
-                +" or name like "+"'%"+search_text+"%'"+" or desig like "+"'%"+search_text+"%'"+
+        if (search_text.matches("[0-9]+") && search_text.length() > 0)
+        sql_query = "select * from happy.employee where name like "+"'%"+search_text+"%'"+
+                " or desig like "+"'%"+search_text+"%'"+
                 " or address like "+"'%"+search_text+"%'"+
                 " or empid = "+search_text;
         else

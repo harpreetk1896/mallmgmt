@@ -313,7 +313,7 @@ public class ViewPro extends javax.swing.JFrame {
     private void jTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldKeyReleased
         String search_text = jTextField.getText();
         
-        if (search_text.matches("[0-9]+") && search_text.length() > 1)
+        if (search_text.matches("[0-9]+") && search_text.length() > 0)
         sql_query = "select * from happy.product where pid like "+"'%"+search_text+"%'"
                 +" or pname like "+"'%"+search_text+"%'"+" or pinfo like "+"'%"+search_text+"%'"+
                 " or qty = "+search_text+" or s_price = "+search_text;

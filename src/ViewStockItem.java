@@ -362,7 +362,7 @@ public class ViewStockItem extends javax.swing.JFrame {
         String search_text = jTextField.getText();
         model.setNumRows(0);
         
-        if (search_text.matches("[0-9]+") && search_text.length() > 1)
+        if (search_text.matches("[0-9]+") && search_text.length() > 0)
         sql_query = "select * from happy.product where pid like "+"'%"+search_text+"%'"
                 +" or pname like "+"'%"+search_text+"%'"+" or qty = "+search_text;
         else

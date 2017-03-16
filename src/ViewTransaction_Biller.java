@@ -332,7 +332,7 @@ public class ViewTransaction_Biller extends javax.swing.JFrame {
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         String search_text = jTextField1.getText();
         
-        if (search_text.matches("[0-9]+") && search_text.length() > 1)
+        if (search_text.matches("[0-9]+") && search_text.length() > 0)
         sql = "select * from happy.invoice where cust_name like "+"'%"+search_text+"%'"
                 +" or invoiceid = "+search_text+" or total = "+search_text;
         else

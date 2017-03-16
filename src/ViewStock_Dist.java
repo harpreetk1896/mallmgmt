@@ -359,10 +359,10 @@ public class ViewStock_Dist extends javax.swing.JFrame {
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         String search_text = jTextField1.getText();
         System.out.println("ji"+search_text);
-        if (search_text.matches("[0-9]+") && search_text.length() > 1)
+        if (search_text.matches("[0-9]+") && search_text.length() >  0)
         {sql_query = "select * from happy.stock where pid like "+"'%"+search_text+"%'"+" or distid = "
                 +search_text+" or entry = "+search_text+" or qty = "+search_text+" or price = "+search_text;
-            System.out.println("jiiiii");}
+            }
         
         else
             sql_query = "select * from happy.stock where pid like "+"'%"+search_text+"%'";

@@ -315,7 +315,7 @@ public class ViewDist extends javax.swing.JFrame {
         String sql_query=null;
         
         //System.out.println("ji::"+search_text);
-        if (search_text.matches("[0-9]+") && search_text.length() > 1)
+        if (search_text.matches("[0-9]+") && search_text.length() > 0)
         sql_query = "select * from happy.distributor where dname like "+"'%"+search_text+"%'"
                 +" or daddress like "+"'%"+search_text+"%'"+" or dcontact_no like "+"'%"+search_text+"%'"+
                 " or distid = "+search_text;
