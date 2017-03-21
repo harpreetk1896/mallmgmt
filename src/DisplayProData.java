@@ -153,14 +153,7 @@ public class DisplayProData extends JFrame  {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         add(scroll);
-        
-        /*MessageFormat header = new MessageFormat("Print");
-        MessageFormat footer =new MessageFormat("Page 0");
-            try{
-                table1.print(JTable.PrintMode.NORMAL, header, footer);
-            }catch(java.awt.print.PrinterException e)
-            { JOptionPane.showMessageDialog(null,e.getMessage(), "Error Message", JOptionPane.OK_OPTION); };*/
-        //setSize(400, 300);
+    
     }
 
     public static void main(String args[]) {

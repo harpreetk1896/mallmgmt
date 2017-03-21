@@ -195,7 +195,6 @@ public class UpdateFrame extends javax.swing.JFrame {
         
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         Name=jTextField1.getText();
         Desig=jTextField2.getText();
         Add=jTextField5.getText();

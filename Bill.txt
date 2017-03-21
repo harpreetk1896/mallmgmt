@@ -1,11 +1,13 @@
 Customer Name: Rishab
-Invoice No: 1115
-Date/Time: 2017-03-14 00:07:06
+Invoice No: 1116
+Date/Time: 2017-03-14 10:37:55
 
 Item                              Qty   Amt
 ------------------------------------------------
-MDH Kitchen King 100g             1     63.0
-Colgate Super Flexi Toothbrush    1     17.0
-Henko 250g                        1     25.0
+Classmate Notebook 140 pgs        1     45.0
+Hamam Soap Pack of 3              2     200.0
+Surf Excel Value Pack 800g        2     160.0
+Parachute Body Lotion 160g        1     160.0
+Colgate Super Flexi Toothbrush    1     20.0
 ------------------------------------------------
-Total:                                  105.0
+Total:                                  585.0
