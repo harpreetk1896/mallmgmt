@@ -1,6 +1,7 @@
 
-import com.sun.glass.events.KeyEvent;
+
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Connection;
@@ -39,20 +40,6 @@ public class AddProduct extends javax.swing.JFrame{
         this.setSize(x,y);
         jTextField4.requestFocus();
         tryAgain();
-    }
-    void tryAgain()
-    {
-        try {
-            String add = InetAddress.getLocalHost().toString();
-            add=add.substring(add.lastIndexOf("/")+1);
-            //Adding label text for mobile barcode instructions
-            if(add.compareTo("127.0.0.1")==0)
-                jLabel10.setText("* To use mobile barcode, Please connect to same Wi-Fi network as phone (or use Hostpot)");
-            else
-                jLabel10.setText("* To use mobile barcode, enter Server address as "+add+" and port no. as 1504");
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
@@ -500,6 +487,21 @@ public class AddProduct extends javax.swing.JFrame{
         tryAgain();
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    void tryAgain()
+    {
+        try {
+            String add = InetAddress.getLocalHost().toString();
+            add=add.substring(add.lastIndexOf("/")+1);
+            //Adding label text for mobile barcode instructions
+            if(add.substring(0,3).compareTo("127")==0)
+                jLabel10.setText("* To use mobile barcode, Please connect to same Wi-Fi network as phone (or use Hostpot)");
+            else
+                jLabel10.setText("* To use mobile barcode, enter Server address as "+add+" and port no. as 1504");
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void jTextField3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyPressed
         // TODO add your handling code here:
         if(evt.getKeyCode()==KeyEvent.VK_ENTER)
