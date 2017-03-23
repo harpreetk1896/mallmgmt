@@ -33,11 +33,6 @@ public class UpdateFrameStockEntry extends javax.swing.JFrame {
         initComponents();
         
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        
-        Toolkit tk= Toolkit.getDefaultToolkit();
-        int x= (int) tk.getScreenSize().getWidth();
-        int y= (int) tk.getScreenSize().getHeight();
-        this.setSize(x,y);
         jComboBox1.requestFocus();
         Connection con=Connect.ConnectDB();
         ResultSet rs=null;
@@ -294,6 +289,7 @@ public class UpdateFrameStockEntry extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed

@@ -185,7 +185,7 @@ public class UpdateFrame extends javax.swing.JFrame {
             s1.close();
             conn.close();
           
-            JOptionPane.showMessageDialog(null, "Employee Updated");
+            //JOptionPane.showMessageDialog(null, "Employee Updated");
             setVisible(false);
            // result.last();
         }

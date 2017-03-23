@@ -1,4 +1,5 @@
 
+import java.awt.BorderLayout;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,10 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -293,9 +298,9 @@ public class EditStockEntry extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -362,7 +367,23 @@ public class EditStockEntry extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        new DisplayProData();
+        JFrame frm = new JFrame();
+        frm.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+         frm.setTitle("Database Search Result");
+         frm.setLayout(new BorderLayout());
+         frm.setLocation(390,160);
+         frm.setSize(650,400);
+         DefaultTableModel model = new DefaultTableModel();
+         JTable table = new JTable();
+         table.setModel(model);
+         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+         table.setFillsViewportHeight(true);
+         JScrollPane scroll = new JScrollPane(table);
+         ViewStock_Dist v = new ViewStock_Dist(model,scroll);
+         frm.add(scroll);
+         System.out.println(model.getRowCount());
+         frm.setVisible(true);
+        
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed

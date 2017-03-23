@@ -79,7 +79,7 @@ public class MainFrame extends javax.swing.JFrame {
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
-        System.out.println(x+" "+y);
+        
         this.setSize(x,y);
     }
     
@@ -116,11 +116,6 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jTextField1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 102, 102)));
         jTextField1.setOpaque(false);
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
 
         jButton2.setBackground(new Color(0,0,0,0));
         jButton2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 15)); // NOI18N
@@ -138,11 +133,6 @@ public class MainFrame extends javax.swing.JFrame {
         jPasswordField1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jPasswordField1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 102, 102)));
         jPasswordField1.setOpaque(false);
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
-            }
-        });
         jPasswordField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jPasswordField1KeyPressed(evt);
@@ -224,8 +214,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addGap(30, 30, 30))
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(547, Short.MAX_VALUE))
         );
@@ -262,46 +251,39 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        if (jTextField1.getText().equals("")) {
-            JOptionPane.showMessageDialog( this, "Please enter user name","Error", JOptionPane.ERROR_MESSAGE);
-            return;
-
-        }
-        String Password= String.valueOf(jPasswordField1.getPassword());
-        if (Password.equals("")) {
-            JOptionPane.showMessageDialog( this, "Please enter password","Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
         handler();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jPasswordField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyPressed
-        // TODO add your handling code here:
         if (evt.getKeyCode()==KeyEvent.VK_ENTER){
             handler();
         }
     }//GEN-LAST:event_jPasswordField1KeyPressed
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         new ChangePassword().setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+                                           
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-
+    public static Billing bill;
     
     private void handler() {    
-           con=Connect.ConnectDB();
-         char[] pass=  jPasswordField1.getPassword(); 
-         String pass1 = new String(pass);
-      String sql= "select * from happy.users where Username= '" + jTextField1.getText() + "'"
+         if (jTextField1.getText().equals("")) {
+           JOptionPane.showMessageDialog( this, "Please enter user name","Error", JOptionPane.ERROR_MESSAGE);
+           return;
+            
+            }
+        String Password= String.valueOf(jPasswordField1.getPassword());
+        if (Password.equals("")) {
+           JOptionPane.showMessageDialog( this, "Please enter password","Error", JOptionPane.ERROR_MESSAGE);
+           return;
+           }
+        
+        con=Connect.ConnectDB();
+        char[] pass=  jPasswordField1.getPassword(); 
+        String pass1 = new String(pass);
+        String username=jTextField1.getText();
+        String sql= "select * from happy.users where Username= '" + username + "'"
               + " and Password ='" + pass1 + "'";
       //System.out.println(sql);
       try
@@ -310,11 +292,25 @@ public class MainFrame extends javax.swing.JFrame {
           rs= pst.executeQuery();
           
           if (rs.next() ){
-             //this.hide();
-             //System.out.println("happu");
-             Mainpage frm=new Mainpage();
-             frm.setVisible(true);
-             setVisible(false);
+             
+             if(username.equals("admin")) 
+                new Mainpage().setVisible(true);
+            
+             else
+             {
+                 if(TCPServer.running==false)
+                    {
+                        Thread t1 = new Thread(new TCPServer());
+                        t1.start();
+                    }
+                   bill= new Billing();
+                   bill.setVisible(true);
+                   new Billing().setVisible(true);
+             }
+               
+             
+             dispose();
+             
           }
           else{
               

@@ -1,13 +1,10 @@
 Customer Name: Rishab
-Invoice No: 1116
-Date/Time: 2017-03-14 10:37:55
+Invoice No: 1216
+Date/Time: 2017-03-23 10:06:21
 
 Item                              Qty   Amt
 ------------------------------------------------
-Classmate Notebook 140 pgs        1     45.0
-Hamam Soap Pack of 3              2     200.0
-Surf Excel Value Pack 800g        2     160.0
-Parachute Body Lotion 160g        1     160.0
-Colgate Super Flexi Toothbrush    1     20.0
+Colgate Super Flexi Toothbrush    5     100.0
+Hamam Soap Pack of 3              1     100.0
 ------------------------------------------------
-Total:                                  585.0
+Total:                                  200.0

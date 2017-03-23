@@ -35,7 +35,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
-
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -283,13 +282,13 @@ public class Billing extends javax.swing.JFrame implements Printable{
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Customer Name");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("P_Name");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Quantity");
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -313,7 +312,7 @@ public class Billing extends javax.swing.JFrame implements Printable{
         });
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton6.setText("Back");
+        jButton6.setText("Exit");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -338,6 +337,7 @@ public class Billing extends javax.swing.JFrame implements Printable{
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel4.setText("Discount ( if any)");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -361,7 +361,7 @@ public class Billing extends javax.swing.JFrame implements Printable{
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Product ID");
 
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -547,10 +547,18 @@ public class Billing extends javax.swing.JFrame implements Printable{
 
     void add_button()
     {
+        qty=Integer.parseInt(jTextField5.getText());
+        if(qty<=0)
+        {
+            jTextField5.setText(null);
+            jTextField2.setText(null);
+            jComboBox1.setSelectedItem("");
+            jTextField2.requestFocus();
+            return;
+        }
         String pro_choosen = jComboBox1.getSelectedItem().toString();
         itemid = pro_choosen.substring(pro_choosen.lastIndexOf("~") + 2);
         item = pro_choosen.substring(0,pro_choosen.lastIndexOf("~") - 1);
-        qty=Integer.parseInt(jTextField5.getText());
         
         showTable();
        
@@ -570,16 +578,14 @@ public class Billing extends javax.swing.JFrame implements Printable{
         } catch (SQLException ex) {
             Logger.getLogger(Billing.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Mainpage frm = new Mainpage();
-          frm.setVisible(true);
-          setVisible(false);
-          Mainpage.bill.setVisible(false);
+       MainFrame.bill.dispose();
+       dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
     
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-          new ViewBill().setVisible(true);
-          setVisible(false);
+          new ViewBill_Biller().setVisible(true);
+          dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -682,8 +688,8 @@ public class Billing extends javax.swing.JFrame implements Printable{
     }
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
-        new ViewTransaction().setVisible(true);
-        setVisible(false);
+        new ViewTransaction_Biller().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jTextField2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusGained

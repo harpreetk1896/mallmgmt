@@ -84,20 +84,12 @@ public class DisplayProData extends JFrame  {
                 //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
                 i++;
             }
-            if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (i == 1) {
-                //System.out.println(i + " Record Found");
-            } else {
-                //System.out.println(i + " Records Found");
-            }
+           
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         add(scroll);
-        setVisible(true);
-        //setSize(400, 300);
+         
     }
     public void showTableData2() {
 
@@ -109,13 +101,6 @@ public class DisplayProData extends JFrame  {
         model1.setRowCount(0);
         table1 = new JTable();
         table1.setModel(model1);
-        
-        table1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table1.getColumnModel().getColumn(0).setPreferredWidth(30);
-        table1.getColumnModel().getColumn(1).setPreferredWidth(3);
-        table1.getColumnModel().getColumn(2).setPreferredWidth(6);
-        //********************************************************************
-        
        
         table1.setFillsViewportHeight(true);
         JScrollPane scroll = new JScrollPane(table1);
@@ -137,22 +122,16 @@ public class DisplayProData extends JFrame  {
                 Pid = rs.getString("pid");
                 Price = rs.getString("s_price");
                 
-                model1.addRow(new Object[]{Pid,Name,Info});
+                model1.addRow(new Object[]{Pid,Name,Price});
                 //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
                 i++;
             }
-            if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (i == 1) {
-                //System.out.println(i + " Record Found");
-            } else {
-                //System.out.println(i + " Records Found");
-            }
+           
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         add(scroll);
+        
     
     }
 

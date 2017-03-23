@@ -21,11 +21,10 @@ public class DisplayEmpData extends JFrame  {
     ResultSet  rs1;
     Statement  st1;
     PreparedStatement pst;
-    String ids;
     static JTable table;
     private static String Name=null,Desig=null,Add=null,Doj=null,No=null,Empid=null;
     String[] columnNames = {"Empid","Name","Designation","Address","Date_of_Joining","Contact_No"};
-    String from;
+    String sql=null;
     DefaultTableModel model; 
     
     DisplayEmpData() {
@@ -36,14 +35,22 @@ public class DisplayEmpData extends JFrame  {
         setLocation(390,160);
         setSize(650,400);
         model = new DefaultTableModel();
+        sql="select * from happy.employee";
         showTableData();
         setVisible(true);
     }
 
     DisplayEmpData(DefaultTableModel m) {
         model=m;
+        sql="select * from happy.employee";
         showTableData();
        }
+
+    DisplayEmpData(DefaultTableModel m, String s) {
+        model=m;
+        sql = s;
+        showTableData();
+    }
     public void showTableData() {
 
         model.setColumnIdentifiers(columnNames);
@@ -62,7 +69,7 @@ public class DisplayEmpData extends JFrame  {
 
         try {
             conn = Connect.ConnectDB();
-            pst = conn.prepareStatement("select * from happy.employee");
+            pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             int i = 0;
             while (rs.next()) {
@@ -77,14 +84,7 @@ public class DisplayEmpData extends JFrame  {
                 //JOptionPane.showMessageDialog(null, "Found", "Error", JOptionPane.ERROR_MESSAGE);
                 i++;
             }
-            if (i < 1) {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (i == 1) {
-                //System.out.println(i + " Record Found");
-            } else {
-                //System.out.println(i + " Records Found");
-            }
+           
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

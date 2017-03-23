@@ -36,6 +36,7 @@ public class TCPServer implements Runnable{
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String str = br.readLine();
+                        System.out.println(str);
                         if(str.contains("!"))
                         BarcodeInput.setInput(str.substring(str.lastIndexOf("!")+1));
                         else

@@ -152,7 +152,7 @@ public class UpdateFramePro extends javax.swing.JFrame {
             s1.close();
             conn.close();
           
-            JOptionPane.showMessageDialog(null, "Product Updated");
+            //JOptionPane.showMessageDialog(null, "Product Updated");
             setVisible(false);
            // result.last();
         }

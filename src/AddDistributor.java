@@ -1,4 +1,5 @@
 
+import com.sun.glass.events.KeyEvent;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -62,6 +63,7 @@ public class AddDistributor extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
 
@@ -162,14 +164,15 @@ public class AddDistributor extends javax.swing.JFrame {
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setMinimumSize(new java.awt.Dimension(0, 11));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Name ");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Contact No");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Address");
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -180,6 +183,18 @@ public class AddDistributor extends javax.swing.JFrame {
             }
         });
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
+
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField5KeyPressed(evt);
+            }
+        });
+
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton6.setText("Back");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -187,6 +202,8 @@ public class AddDistributor extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
+
+        jLabel2.setForeground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -199,18 +216,21 @@ public class AddDistributor extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(42, 42, 42)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4))
-                        .addGap(177, 177, 177)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField5)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4))
+                                .addGap(177, 177, 177)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                                    .addComponent(jTextField2)
+                                    .addComponent(jTextField5)))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(190, 190, 190)
+                        .addGap(192, 192, 192)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99)
+                        .addGap(97, 97, 97)
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(491, Short.MAX_VALUE))
         );
@@ -234,11 +254,13 @@ public class AddDistributor extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(jLabel3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addGap(49, 49, 49)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(352, 352, 352))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(312, 312, 312))
         );
 
         jPanel5.setBackground(new java.awt.Color(229, 229, 255));
@@ -271,7 +293,7 @@ public class AddDistributor extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1093, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1101, Short.MAX_VALUE))
                 .addGap(0, 45, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -312,9 +334,21 @@ public class AddDistributor extends javax.swing.JFrame {
 
      private static String Name=null,Add=null,No=null;
      
-     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+     private void handler()
+     {
+         jLabel2.setText("");
+         if (jTextField1.getText().equals("")) {
+           jLabel2.setText( "Enter name");
+           return;  }
+         
+          if (jTextField2.getText().equals("")) {
+           jLabel2.setText( "Enter Number");
+           return;  }
+          
+           if (jTextField5.getText().equals("")) {
+           jLabel2.setText( "Enter Address");
+           return;  }
+    
         Name=jTextField1.getText();
         No=jTextField2.getText();
         Add=jTextField5.getText();
@@ -326,27 +360,31 @@ public class AddDistributor extends javax.swing.JFrame {
        } catch (SQLException ex) {
            System.out.println(ex.getMessage());
        } catch (InstantiationException ex) {
-            Logger.getLogger(AddEmployee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddDistributor.class.getName()).log(Level.SEVERE, null, ex);
         }
         jTextField1.setText(null);
         jTextField2.setText(null);
         jTextField5.setText(null);
        
-        
+     }
+     
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+         handler();    
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         Mainpage frm = new Mainpage();
           frm.setVisible(true);
-          setVisible(false);
-          Mainpage.dist.setVisible(false);
+          dispose();
+          Mainpage.dist.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         UpdateDist frm = new UpdateDist();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -354,21 +392,32 @@ public class AddDistributor extends javax.swing.JFrame {
         DelDist frm;
             frm = new DelDist();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         ViewDist frm = new ViewDist();
           frm.setVisible(true);
-          setVisible(false);
+          dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private static void InsertIntoTable() throws SQLException, InstantiationException {
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        // TODO add your handling code here:
+        jLabel2.setText("");
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()== KeyEvent.VK_ENTER)
+            handler();
+    }//GEN-LAST:event_jTextField5KeyPressed
+
+    private  void InsertIntoTable() throws SQLException, InstantiationException {
         try{
             Connection conn = Connect.ConnectDB();
             Statement s1 =null;
@@ -379,8 +428,8 @@ public class AddDistributor extends javax.swing.JFrame {
             System.out.println("Done");
             s1.close();
             conn.close();
-            JOptionPane.showMessageDialog(null, "Distributor Added");
-           // result.last();
+            jLabel2.setText("Distributor Added");
+            
         }
     catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
@@ -430,6 +479,7 @@ public class AddDistributor extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
