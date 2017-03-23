@@ -1,10 +1,9 @@
-Customer Name: Rishab
-Invoice No: 1216
-Date/Time: 2017-03-23 10:06:21
+Customer Name: r
+Invoice No: 1217
+Date/Time: 2017-03-24 01:59:20
 
 Item                              Qty   Amt
 ------------------------------------------------
-Colgate Super Flexi Toothbrush    5     100.0
-Hamam Soap Pack of 3              1     100.0
+Classmate Notebook 140 pgs        1     45.0
 ------------------------------------------------
-Total:                                  200.0
+Total:                                  45.0

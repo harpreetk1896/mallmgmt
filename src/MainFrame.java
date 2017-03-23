@@ -270,12 +270,14 @@ public class MainFrame extends javax.swing.JFrame {
     private void handler() {    
          if (jTextField1.getText().equals("")) {
            JOptionPane.showMessageDialog( this, "Please enter user name","Error", JOptionPane.ERROR_MESSAGE);
+           jTextField1.requestFocus();
            return;
             
             }
         String Password= String.valueOf(jPasswordField1.getPassword());
         if (Password.equals("")) {
            JOptionPane.showMessageDialog( this, "Please enter password","Error", JOptionPane.ERROR_MESSAGE);
+           jPasswordField1.requestFocus();
            return;
            }
         

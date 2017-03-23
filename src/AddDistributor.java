@@ -33,6 +33,7 @@ public class AddDistributor extends javax.swing.JFrame {
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
+        jTextField1.requestFocus();
     }
 
     /**
@@ -203,7 +204,9 @@ public class AddDistributor extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel2.setText("Check");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -339,14 +342,17 @@ public class AddDistributor extends javax.swing.JFrame {
          jLabel2.setText("");
          if (jTextField1.getText().equals("")) {
            jLabel2.setText( "Enter name");
+           jTextField1.requestFocus();
            return;  }
          
           if (jTextField2.getText().equals("")) {
            jLabel2.setText( "Enter Number");
+           jTextField2.requestFocus();
            return;  }
           
            if (jTextField5.getText().equals("")) {
            jLabel2.setText( "Enter Address");
+           jTextField5.requestFocus();
            return;  }
     
         Name=jTextField1.getText();

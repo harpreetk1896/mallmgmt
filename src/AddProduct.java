@@ -394,15 +394,18 @@ public class AddProduct extends javax.swing.JFrame{
      {
           jLabel6.setText( "");
            if (jTextField4.getText().equals("")) {
-           jLabel6.setText( "Enter P_ID");
+           jLabel6.setText( "Enter Product ID");
+           jTextField4.requestFocus();
            return;  }
         
         if (jTextField1.getText().equals("")) {
            jLabel6.setText( "Enter Name");
+           jTextField1.requestFocus();
            return;  }
         
         if (jTextField3.getText().equals("")) {
            jLabel6.setText( "Enter Price");
+           jTextField3.requestFocus();
            return;  }
         
        
