@@ -261,6 +261,7 @@ public class UpdateStockItem extends javax.swing.JFrame {
         jButton7.setBackground(new java.awt.Color(11, 153, 153));
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton7.setText("Access Table");
+        jButton7.setFocusable(false);
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -412,9 +413,11 @@ public class UpdateStockItem extends javax.swing.JFrame {
     {
         if (jComboBox1.getSelectedItem().toString()=="") {
            jLabel4.setText( "Choose Product Name");
+           jComboBox1.requestFocus();
            return;  }
         if (jTextField2.getText().equals("")) {
            jLabel4.setText( "Enter quantity");
+           jTextField2.requestFocus();
            return;  }
         Connection con=Connect.ConnectDB();
         Statement s1 =null;

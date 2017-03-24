@@ -42,6 +42,7 @@ public class ViewBill extends javax.swing.JFrame {
         int y= (int) tk.getScreenSize().getHeight();
    
         this.setSize(x,y);
+        jTextField1.requestFocus();
         //new DisplayStockData(model);
     }
     public void showTable() {
@@ -181,6 +182,7 @@ public class ViewBill extends javax.swing.JFrame {
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton6.setText("Back");
+        jButton6.setToolTipText("");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -352,6 +354,7 @@ public class ViewBill extends javax.swing.JFrame {
             if(jTextField1.getText().equals(""))
             {
                 jLabel4.setText("Enter Invoice number");
+                jTextField1.requestFocus();
                 return;
             }
             sr_no=0;

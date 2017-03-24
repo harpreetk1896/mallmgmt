@@ -42,6 +42,7 @@ public class EditStockEntry extends javax.swing.JFrame {
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
         this.setSize(x,y);
+        jTextField2.requestFocus();
     }
 
     /**
@@ -72,6 +73,7 @@ public class EditStockEntry extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -227,6 +229,7 @@ public class EditStockEntry extends javax.swing.JFrame {
         jButton7.setBackground(new java.awt.Color(11, 153, 153));
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton7.setText("Access Table");
+        jButton7.setFocusable(false);
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -241,6 +244,9 @@ public class EditStockEntry extends javax.swing.JFrame {
                 jTextField2KeyPressed(evt);
             }
         });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -258,11 +264,14 @@ public class EditStockEntry extends javax.swing.JFrame {
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(131, 131, 131)
-                        .addComponent(jLabel2)
-                        .addGap(53, 53, 53)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
-                        .addComponent(jButton7)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(53, 53, 53)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(49, 49, 49)
+                                .addComponent(jButton7)))))
                 .addContainerGap(493, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -282,7 +291,9 @@ public class EditStockEntry extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(115, 115, 115)
                         .addComponent(jLabel3)))
-                .addContainerGap(532, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(493, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -446,6 +457,7 @@ public class EditStockEntry extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
@@ -459,10 +471,17 @@ public class EditStockEntry extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void update() {
+        entryid=jTextField2.getText();
+        if(entryid.equals(""))
+        {
+            jLabel1.setText("Enter Entry no.");
+            jTextField2.requestFocus();
+            return;
+        }
      Connection con=Connect.ConnectDB();
         ResultSet rs=null;
         PreparedStatement pst=null;
-        entryid=jTextField2.getText();
+        
         String sql= "select happy.stock.pid,happy.stock.distid,happy.stock.qty,happy.stock.price,happy.stock.date_of_delivery,happy.product.pname,happy.distributor.dname from happy.stock "
                 + "inner join happy.product on happy.product.pid=happy.stock.pid "
                 + "inner join happy.distributor on happy.distributor.distid=happy.stock.distid where entry = " + entryid;

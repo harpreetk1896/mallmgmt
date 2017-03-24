@@ -366,18 +366,22 @@ public class AddEmployee extends javax.swing.JFrame {
          jLabel6.setText( "");
          if (jTextField1.getText().equals("")) {
            jLabel6.setText( "Enter Name");
+           jTextField1.requestFocus();
            return;  }
          
           if (jTextField2.getText().equals("")) {
            jLabel6.setText( "Enter Designation");
+           jTextField2.requestFocus();
            return;  }
           
            if (jTextField5.getText().equals("")) {
            jLabel6.setText( "Enter Address");
+           jTextField5.requestFocus();
            return;  }
            
            if (jTextField4.getText().equals("")) {
            jLabel6.setText( "Enter Contact No");
+           jTextField4.requestFocus();
            return;  }
            
 

@@ -160,7 +160,6 @@ public class AddStockItem extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -300,9 +299,16 @@ public class AddStockItem extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("Price");
 
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField4KeyPressed(evt);
+            }
+        });
+
         jButton8.setBackground(new java.awt.Color(11, 153, 153));
         jButton8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton8.setText("Access Table");
+        jButton8.setFocusable(false);
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
@@ -312,6 +318,7 @@ public class AddStockItem extends javax.swing.JFrame {
         jButton9.setBackground(new java.awt.Color(11, 153, 153));
         jButton9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton9.setText("Access Table");
+        jButton9.setFocusable(false);
         jButton9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton9ActionPerformed(evt);
@@ -330,6 +337,7 @@ public class AddStockItem extends javax.swing.JFrame {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 0, 0));
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -457,16 +465,6 @@ public class AddStockItem extends javax.swing.JFrame {
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
-        jButton3.setBackground(new java.awt.Color(0, 102, 102));
-        jButton3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Edit Stock Entry");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -479,11 +477,6 @@ public class AddStockItem extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(614, 614, 614)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGap(615, 615, 615)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -493,12 +486,7 @@ public class AddStockItem extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(413, 413, 413)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(414, Short.MAX_VALUE)))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -508,21 +496,26 @@ public class AddStockItem extends javax.swing.JFrame {
      
      public void handler()
      {
+         jLabel2.setForeground(Color.red);
          jLabel2.setText("");
         if (jComboBox1.getSelectedItem().toString()=="") {
            jLabel2.setText( "Choose Product Name");
+           jComboBox1.requestFocus();
            return;  }
         
         if (jComboBox2.getSelectedItem().toString()=="") {
            jLabel2.setText( "Choose Distributor Name");
+           jComboBox2.requestFocus();
            return;  }
         
          if (jTextField2.getText().equals("")) {
            jLabel2.setText( "Enter Quantity");
+           jTextField2.requestFocus();
            return;  }
         
         if (jTextField4.getText().equals("")) {
            jLabel2.setText( "Enter Price");
+           jTextField4.requestFocus();
            return;  }
         
        //Getting Date************************************
@@ -551,6 +544,7 @@ public class AddStockItem extends javax.swing.JFrame {
        } catch (InstantiationException ex) {
             Logger.getLogger(AddStockItem.class.getName()).log(Level.SEVERE, null, ex);
         }
+        jComboBox1.requestFocus();
         jTextField2.setText(null);
         jTextField4.setText(null);
         jComboBox1.setSelectedItem("");
@@ -597,10 +591,6 @@ public class AddStockItem extends javax.swing.JFrame {
           dispose();
     }//GEN-LAST:event_jButton11ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         new EditStockEntry().setVisible(true);
           dispose();
@@ -619,6 +609,11 @@ public class AddStockItem extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jPanel1KeyPressed
 
+    private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
+        if(evt.getKeyCode()==java.awt.event.KeyEvent.VK_ENTER)
+            handler();
+    }//GEN-LAST:event_jTextField4KeyPressed
+
     private void InsertIntoTable() throws SQLException, InstantiationException {
         try{
             Connection conn = Connect.ConnectDB();
@@ -632,7 +627,6 @@ public class AddStockItem extends javax.swing.JFrame {
             s1.close();
             conn.close();
            // result.last();
-            JOptionPane.showMessageDialog(null, "Stock Item Added");
         }
     catch(SQLException ex){
             JOptionPane.showMessageDialog(null,"Cannot Connect to Database", "Error Message", JOptionPane.OK_OPTION);
@@ -678,7 +672,6 @@ public class AddStockItem extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;

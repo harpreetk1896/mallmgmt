@@ -54,7 +54,7 @@ public class MainFrame extends javax.swing.JFrame {
         
         sql= "CREATE TABLE happy.product (pid varchar(30) not null primary key,"
                 + "pname varchar(30) not null ,pinfo varchar(150) not null,qty integer default 0"
-                + ",s_price integer)";
+                + ",s_price double)";
         statement.executeUpdate(sql);System.out.println("Product created");
         
         sql= "CREATE TABLE happy.invoice (invoiceid integer not null primary key generated always as identity "
@@ -72,12 +72,12 @@ public class MainFrame extends javax.swing.JFrame {
                 + "(start with 30001,increment by 1),dname varchar(30) not null,dcontact_no varchar(13) not null,daddress varchar (150))";
         statement.executeUpdate(sql);System.out.println("Distributor created");
         
-        sql= "CREATE TABLE happy.bill (pname varchar(100),quantity integer,price integer)";
+        sql= "CREATE TABLE happy.bill (pname varchar(100),quantity integer,price double)";
         statement.executeUpdate(sql);System.out.println("Bill created");
         
         sql= "CREATE TABLE happy.stock (entry integer primary key generated always as identity (start with 1,increment by 1),"
                 + "pid varchar(30),distid integer ,Qty integer not null, "
-                + "Price integer not null,Date_of_delivery date,foreign key(distid) references happy.distributor(distid) on delete cascade,"
+                + "Price double not null,Date_of_delivery date,foreign key(distid) references happy.distributor(distid) on delete cascade,"
                 + "foreign key(pid) references happy.product(pid) on delete cascade)";
         statement.executeUpdate(sql);System.out.println("Stock created");
        
@@ -289,12 +289,14 @@ public class MainFrame extends javax.swing.JFrame {
     private void handler() {    
          if (jTextField1.getText().equals("")) {
            JOptionPane.showMessageDialog( this, "Please enter user name","Error", JOptionPane.ERROR_MESSAGE);
+           jTextField1.requestFocus();
            return;
             
             }
         String Password= String.valueOf(jPasswordField1.getPassword());
         if (Password.equals("")) {
            JOptionPane.showMessageDialog( this, "Please enter password","Error", JOptionPane.ERROR_MESSAGE);
+           jPasswordField1.requestFocus();
            return;
            }
         

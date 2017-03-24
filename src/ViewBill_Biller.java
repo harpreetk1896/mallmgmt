@@ -373,6 +373,7 @@ public class ViewBill_Biller extends javax.swing.JFrame {
             if(jTextField1.getText().equals(""))
             {
                 jLabel4.setText("Enter Invoice number");
+                jTextField1.requestFocus();
                 return;
             }
             sr_no=0;
