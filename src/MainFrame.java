@@ -32,36 +32,55 @@ public class MainFrame extends javax.swing.JFrame {
     private static PreparedStatement pst=null;
    
     protected static boolean createTable( ) {
-        System.setProperty("derby.system.home","C:/Users/Rishab/.netbeans-derby");
+        //System.setProperty("derby.system.home","C:/Users/Rishab/.netbeans-derby");
 
     try {
         Connection con=Connect.ConnectDB();
         Statement statement = con.createStatement();
-        String sql= "CREATE TABLE happy.product (pid varchar(30) not null primary key,"
+        String sql= "CREATE TABLE happy.users (username varchar(30) not null primary key,"
+                + "password varchar(30) not null)";
+        statement.executeUpdate(sql);System.out.println("User created");
+        //Insertion in table 
+        sql= "Insert into happy.users values ('admin','admin')";
+        Statement s1= con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        s1.executeUpdate(sql);
+        s1.close();
+        
+        sql= "Insert into happy.users values ('biller','biller')";
+        s1= con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        s1.executeUpdate(sql);
+        s1.close();
+        //*****************
+        
+        sql= "CREATE TABLE happy.product (pid varchar(30) not null primary key,"
                 + "pname varchar(30) not null ,pinfo varchar(150) not null,qty integer default 0"
                 + ",s_price integer)";
-        statement.executeUpdate(sql);
-        System.out.println("Bill created");
+        statement.executeUpdate(sql);System.out.println("Product created");
+        
         sql= "CREATE TABLE happy.invoice (invoiceid integer not null primary key generated always as identity "
                 + "(start with 1001,increment by 1),cust_name varchar(40),startrow integer, endrow integer,"
                 + "date_time timestamp,total integer)";
-        statement.executeUpdate(sql);
-        System.out.println("BIlkl created");
+        statement.executeUpdate(sql);System.out.println("Invoice created");
+        
+        
          sql= "CREATE TABLE happy.employee (empid integer not null primary key generated always as identity "
                 + "(start with 10001,increment by 1),name varchar(30) not null,desig varchar(30) not null,"
                 + "address varchar (150),date_of_joining date,contact_no varchar(13) not null)";
-        statement.executeUpdate(sql);
+        statement.executeUpdate(sql);System.out.println("Employee created");
+        
         sql= "CREATE TABLE happy.distributor (distid integer not null primary key generated always as identity "
                 + "(start with 30001,increment by 1),dname varchar(30) not null,dcontact_no varchar(13) not null,daddress varchar (150))";
-        statement.executeUpdate(sql);
+        statement.executeUpdate(sql);System.out.println("Distributor created");
+        
         sql= "CREATE TABLE happy.bill (pname varchar(100),quantity integer,price integer)";
-        statement.executeUpdate(sql);
+        statement.executeUpdate(sql);System.out.println("Bill created");
+        
         sql= "CREATE TABLE happy.stock (entry integer primary key generated always as identity (start with 1,increment by 1),"
                 + "pid varchar(30),distid integer ,Qty integer not null, "
                 + "Price integer not null,Date_of_delivery date,foreign key(distid) references happy.distributor(distid) on delete cascade,"
                 + "foreign key(pid) references happy.product(pid) on delete cascade)";
-        statement.executeUpdate(sql);
-        //System.out.println("Table Sucessfully Created :  food");
+        statement.executeUpdate(sql);System.out.println("Stock created");
+       
         return true;
     }
     catch (SQLException e ) {

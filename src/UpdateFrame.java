@@ -179,9 +179,9 @@ public class UpdateFrame extends javax.swing.JFrame {
             Connection conn = Connect.ConnectDB();
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            
+            System.out.println("jiiiiiiii");
             s1.executeUpdate("Update HAPPY.EMPLOYEE set Name = '"+Name+"',Desig ='"+Desig+"', Address ='"+Add+"', Date_of_joining = '"+Doj+"', Contact_No = '"+No+"' where empid = "+Empid);
-            
+             System.out.println("jiiiiiiii");
             s1.close();
             conn.close();
           
@@ -201,7 +201,6 @@ public class UpdateFrame extends javax.swing.JFrame {
         No=jTextField4.getText();
         Doj=jTextField7.getText();
 
-        System.out.println();
         try {
            UpdateTable();
            

@@ -23,16 +23,27 @@ import javax.swing.table.DefaultTableModel;
 public class ViewStock_Dist extends javax.swing.JFrame {
 
     DefaultTableModel model;
+    Connection conn;
+    ResultSet  rs1;
+    Statement  st1;
+    PreparedStatement pst;
+    static JTable table;
+    private static String Distid=null,Pid=null,date=null,sql_query=null,pname=null,Distname;
+    private static int Qty=0,Price=0,entry=0;
+    String[] columnNames = {"Entry","P_id","Product Name","Dist_ID","Dist Name","Quantity","Price","Date"};
+    JScrollPane scroll;
+    String sql= "select happy.stock.entry,happy.stock.pid,happy.stock.distid,happy.stock.qty,happy.stock.price,"
+                + "happy.stock.date_of_delivery,happy.product.pname,happy.distributor.dname from happy.stock "
+                + "inner join happy.product on happy.product.pid=happy.stock.pid "
+                + "inner join happy.distributor on happy.distributor.distid=happy.stock.distid";
+    
     public ViewStock_Dist() {
         model = new DefaultTableModel();
         initComponents();
         Toolkit tk= Toolkit.getDefaultToolkit();
         int x= (int) tk.getScreenSize().getWidth();
         int y= (int) tk.getScreenSize().getHeight();
-        sql_query="select happy.stock.entry,happy.stock.pid,happy.stock.distid,happy.stock.qty,happy.stock.price,"
-                + "happy.stock.date_of_delivery,happy.product.pname,happy.distributor.dname from happy.stock "
-                + "inner join happy.product on happy.product.pid=happy.stock.pid "
-                + "inner join happy.distributor on happy.distributor.distid=happy.stock.distid";
+        sql_query=sql;
         this.setSize(x,y);
        
         showTableData();
@@ -48,27 +59,23 @@ public class ViewStock_Dist extends javax.swing.JFrame {
         scroll.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
        
-        sql_query="select happy.stock.entry,happy.stock.pid,happy.stock.distid,happy.stock.qty,happy.stock.price,"
-                + "happy.stock.date_of_delivery,happy.product.pname,happy.distributor.dname from happy.stock "
-                + "inner join happy.product on happy.product.pid=happy.stock.pid "
-                + "inner join happy.distributor on happy.distributor.distid=happy.stock.distid";
+        sql_query=sql;
         showTableData();
          //add(scroll);
         
     }
-    Connection conn;
-    ResultSet  rs1;
-    Statement  st1;
-    PreparedStatement pst;
-    static JTable table;
-    private static String Distid=null,Pid=null,date=null,sql_query=null,pname=null,Distname;
-    private static int Qty=0,Price=0,entry=0;
-    String[] columnNames = {"Entry","P_id","Product Name","Dist_ID","Dist Name","Quantity","Price","Date"};
-    JScrollPane scroll;
     
     public void showTableData() {
 
         model.setColumnIdentifiers(columnNames);
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(50);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(40);
+        jTable1.getColumnModel().getColumn(4).setPreferredWidth(80);
+        jTable1.getColumnModel().getColumn(5).setPreferredWidth(30);
+        jTable1.getColumnModel().getColumn(6).setPreferredWidth(30);
+        
 
         try {
            conn = Connect.ConnectDB();
@@ -119,6 +126,7 @@ public class ViewStock_Dist extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
 
@@ -245,11 +253,14 @@ public class ViewStock_Dist extends javax.swing.JFrame {
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(jTable1);
 
+        jTextField1.setPreferredSize(new java.awt.Dimension(6, 25));
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField1KeyReleased(evt);
             }
         });
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icon_search.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -260,12 +271,17 @@ public class ViewStock_Dist extends javax.swing.JFrame {
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(485, 485, 485))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jLabel3)
-                .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabel3)
+                        .addGap(34, 34, 34)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(71, 71, 71)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(73, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -276,8 +292,13 @@ public class ViewStock_Dist extends javax.swing.JFrame {
                 .addContainerGap(534, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(23, 23, 23))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -381,25 +402,30 @@ public class ViewStock_Dist extends javax.swing.JFrame {
           dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        String search_text = jTextField1.getText();
-        System.out.println("ji"+search_text);
-        if (search_text.matches("[0-9]+") && search_text.length() >  0)
-        {sql_query = "select * from happy.stock where pid like "+"'%"+search_text+"%'"+" or distid = "
-                +search_text+" or entry = "+search_text+" or qty = "+search_text+" or price = "+search_text;
-            }
-        
-        else
-            sql_query = "select * from happy.stock where pid like "+"'%"+search_text+"%'";
-        model.setRowCount(0);
-        showTableData();
-        jTextField1.requestFocus();
-    }//GEN-LAST:event_jTextField1KeyReleased
-
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         new EditStockEntry().setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        String search_text = jTextField1.getText().toLowerCase();
+        System.out.println("ji"+search_text);
+        if (search_text.matches("[0-9]+") && search_text.length() >  0)
+        {sql_query = sql+" where happy.stock.entry= "+search_text+" or happy.stock.pid like "+"'%"+search_text+"%' or "
+                + "happy.stock.distid = "+search_text+" or happy.stock.qty = "+search_text
+                + " or happy.stock.price = "+search_text+" or lower(happy.product.pname) like "+"'%"+search_text+"%'"
+                + " or lower(happy.distributor.dname) like "+"'%"+search_text+"%'";
+        }
+
+        else
+        sql_query = sql+" where  happy.stock.pid like "+"'%"+search_text+"%' or "
+                + " lower(happy.product.pname) like "+"'%"+search_text+"%'"
+                + " or lower(happy.distributor.dname) like "+"'%"+search_text+"%'";
+        
+        model.setRowCount(0);
+        showTableData();
+        jTextField1.requestFocus();
+    }//GEN-LAST:event_jTextField1KeyReleased
 
     
     /**
@@ -445,6 +471,7 @@ public class ViewStock_Dist extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
