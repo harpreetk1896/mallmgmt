@@ -397,6 +397,8 @@ public class UpdateDist extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Dist_ID not found","Error",JOptionPane.ERROR_MESSAGE);
 
             }
+             rs.close();
+            pst.close();
         }catch(HeadlessException e){
             JOptionPane.showMessageDialog(null, e);
 

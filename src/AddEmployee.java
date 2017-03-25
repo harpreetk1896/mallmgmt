@@ -454,14 +454,13 @@ public class AddEmployee extends javax.swing.JFrame {
             Connection conn = Connect.ConnectDB();
             Statement s1 =null;
             s1= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            //System.out.println("hi_lm");
-       
+            
             s1.executeUpdate("INSERT INTO HAPPY.EMPLOYEE (name ,desig ,address ,date_of_joining  ,contact_no ) VALUES ('"+Name+"','"+Desig+"','"+Add+"','"+Doj+"','"+No+"')");
-            System.out.println("Done");
+           // System.out.println("Done");
             s1.close();
             conn.close();
             jLabel6.setText("Employee Added");
-           // result.last();
+           
         }
     catch(SQLException ex){
            

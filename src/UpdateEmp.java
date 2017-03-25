@@ -417,13 +417,16 @@ public class UpdateEmp extends javax.swing.JFrame {
                 //jTextField1.setText("");
 
             }
+            rs.close();
+            pst.close();
         }catch(HeadlessException e){
             JOptionPane.showMessageDialog(null, e);
 
         }   catch (SQLException ex) {
             Logger.getLogger(DelEmp.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+           
+           
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:        
