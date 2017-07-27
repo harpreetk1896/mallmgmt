@@ -1,4 +1,6 @@
 <div dir="ltr" style="text-align: left;" trbidi="on">
+<div class="separator" style="clear: both; text-align: center;">
+</div>
 <h2 style="text-align: left;">
 <i>Emporio - Mall Management</i></h2>
 <div style="text-align: left;">
@@ -6,7 +8,8 @@
 <br />
 <h3 style="text-align: left;">
 <i>Installing</i></h3>
-<i> To install the app, just download the </i><br />
+<i> To install the app, just download the distribution zip<a href="https://github.com/harpreetk1896/mallmgmt/releases/download/v1.0/dist.zip" target="_blank"> from here</a>. Now unzip the folder and run JavaAppilcation1.jar&nbsp;</i><br />
+<i>(Note: Java Development Kit 1.7 or above should be installed on system to run it)</i><br />
 <i><br /></i>
 <br />
 <h3 style="text-align: left;">
@@ -87,7 +90,7 @@
 <br />
 <div class="separator" style="clear: both; text-align: center;">
 <i><b><a href="https://1.bp.blogspot.com/-zKjbcSWyuWQ/WXpOst8XxnI/AAAAAAAAC68/OyhKMpnwv80-NBe_98ZarVJV0Vz9S0wlwCEwYBhgL/s1600/Screenshot%2B%252820%2529.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="768" data-original-width="1366" src="https://1.bp.blogspot.com/-zKjbcSWyuWQ/WXpOst8XxnI/AAAAAAAAC68/OyhKMpnwv80-NBe_98ZarVJV0Vz9S0wlwCEwYBhgL/s1600/Screenshot%2B%252820%2529.png" /></a></b></i></div>
-<i><b>&nbsp;</b></i><br />
+<br />
 <div class="separator" style="clear: both; text-align: center;">
 <i><b>Invoice Management</b></i></div>
 <div class="separator" style="clear: both; text-align: center;">
