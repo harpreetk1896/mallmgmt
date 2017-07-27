@@ -95,7 +95,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Mall Management"/>
+            <Property name="text" type="java.lang.String" value="Emporio - Mall Management"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -309,11 +309,13 @@
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField5" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                          <Component id="jButton1" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                          <Component id="jTextField2" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jComboBox1" alignment="0" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jTextField5" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="jButton1" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                              <Component id="jTextField2" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
