@@ -1,4 +1,4 @@
-Customer Name: r
+Customer Name: Rishab
 Invoice No: 1217
 Date/Time: 2017-03-24 01:59:20
 
